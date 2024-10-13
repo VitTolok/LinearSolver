@@ -1,4 +1,6 @@
-from Classes import Matrix
-from GUI import Window
+from GUI.Window import Window
+from calc.Solver import Solver
 
-win = Window.Window()
+solver = Solver()
+win = Window()
+win.changeexec(solver.getexec(win))

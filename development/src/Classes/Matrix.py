@@ -1,3 +1,5 @@
+__name__ = "src.Classes.Matrix"
+
 def _is_rectangular(matrix: list) -> bool:
     """
     Args:
