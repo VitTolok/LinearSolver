@@ -1,2 +1,4 @@
 from Classes import Matrix
-from GUI import gui
+from GUI import Window
+
+win = Window.Window()
