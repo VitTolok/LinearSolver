@@ -30,21 +30,31 @@ class Window:
         self.deinit_ari()
 
     def execdet(self):
-        n = int(self.size_input.get())
-        lst = list(map(int, self.text_input.get("1.0", "end-1c").split()))
-        matrix_2d = [lst[i*n:(i+1)*n] for i in range(n)]
-        self.solver.change_matrix1(Matrix(matrix_2d))
-        det = self.solver.getdet1()
-        self.answer_message.config(text=f"det = {det}")
+        str1 = self.text_input.get("1.0", "end-1c")
+        while "\n\n" in str1:
+            str1 = str1.replace("\n\n", '\n')
+        lst = str1.split('\n')
+        matrix_2d = [list(map(complex, line.split())) for line in lst]
+        try:
+            self.solver.change_matrix1(Matrix(matrix_2d))
+            det = self.solver.getdet1()
+            if isinstance(det, complex):
+                det = complex(round(det.real, 4), round(det.imag, 4))
+                if det.imag == 0:
+                    det = det.real
+            if isinstance(det, float):
+                if int(det) == det:
+                    det = int(det)
+            self.answer_message.config(text=f"det = {det}")
+        except Exception:
+            self.answer_message.config(text="Invalid Input")
     
 
     def init_det(self):
         self.kys()
         self.det_is_init = True
-        self.size_label = tk.Label(self.window, text="Input size:")
-        self.size_label.grid(row=0, column=1)
-        self.size_input = tk.Entry(self.window)
-        self.size_input.grid(row=0, column=2)
+        self.input_label = tk.Label(self.window, text="Input square matrix:")
+        self.input_label.grid(row=0, column=1)
         self.text_input = tk.Text(self.window, height=10, width=30)
         self.text_input.grid(row=1, column=1)
         self.answer_message = tk.Message(self.window, text='The answer will be here', width=300)
@@ -55,26 +65,27 @@ class Window:
     
     def deinit_det(self):
         if self.det_is_init:
-            self.size_label.destroy()
-            self.size_input.destroy()
+            self.input_label.destroy()
             self.text_input.destroy()
             self.answer_message.destroy()
             self.execute_b.destroy()
 
     def execari(self):
-        lst1 = self.text_input1.get("1.0", "end-1c").split('\n')
-        lst2 = self.text_input2.get("1.0", "end-1c").split('\n')
-        if '' in lst1 or '' in lst2:
-            self.output_text.delete("1.0", "end-1c")
-            self.output_text.insert("1.0", "no newlines at the end")
-            return
+        str1 = self.text_input1.get("1.0", "end-1c").strip()
+        str2 = self.text_input2.get("1.0", "end-1c").strip()
+        while "\n\n" in str1:
+            str1 = str1.replace("\n\n", '\n')
+        while "\n\n" in str2:
+            str2 = str2.replace("\n\n", '\n')
+        lst1 = str1.split('\n')
+        lst2 = str2.split('\n')
         operation_str = self.ari_input.get()
         if not (operation_str in ['+', '-', '*']):
             self.output_text.delete("1.0", "end-1c")
             self.output_text.insert("1.0", "invalid operation")
             return
-        matrix2d1 = [list(map(int, line.split())) for line in lst1]
-        matrix2d2 = [list(map(int, line.split())) for line in lst2]
+        matrix2d1 = [list(map(complex, line.split())) for line in lst1]
+        matrix2d2 = [list(map(complex, line.split())) for line in lst2]
         self.solver.change_matrix1(Matrix(matrix2d1))
         self.solver.change_matrix2(Matrix(matrix2d2))
         if operation_str == '+':
@@ -83,8 +94,7 @@ class Window:
             matrix_result = self.solver.getsub()
         else:
             matrix_result = self.solver.getmult()
-        result = '\n'.join([' '.join(list(map(str, line)))
-                            for line in matrix_result._tolist()])
+        result = matrix_result.print()
         self.output_text.delete("1.0", "end-1c")
         self.output_text.insert("1.0", result)
 

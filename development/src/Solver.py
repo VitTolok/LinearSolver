@@ -9,10 +9,10 @@ class Solver:
         self.matrix1 = matrix1
         self.matrix2 = matrix2
  
-    def getdet1(self) -> float:
+    def getdet1(self) -> complex:
         return self.matrix1.det()
     
-    def getdet2(self) -> float:
+    def getdet2(self) -> complex:
         return self.matrix2.det()
     
     def change_matrix1(self, newmatrix: Matrix) -> None:

@@ -29,14 +29,14 @@ class Matrix:
     """
     A class for storing and operating Matrixes.
     """
-    def __det(matrix: list) -> float:
+    def __det(matrix: list) -> complex:
         """
         Calculates the determinator of the given matrix recursively
         Args:
             matrix (list): 2D list representation of a square matrix
 
         Returns:
-            float: its determinator
+            complex: its determinator
         """
         if len(matrix) == 1:
             return matrix[0][0]
@@ -89,7 +89,7 @@ class Matrix:
         """
         return self._cols
 
-    def get(self, row: int, column: int) -> float:
+    def get(self, row: int, column: int) -> complex:
         """Fetches the value from a given position
 
         Args:
@@ -97,19 +97,20 @@ class Matrix:
             column (int): the needed column, iterated from 0
 
         Returns:
-            float: the needed value
+            complex: the needed value
         """
         return self._matrix[row][column]
     
-    def set(self, row: int, column: int, value: float) -> None:
+    def set(self, row: int, column: int, value: complex) -> None:
         """Changes the value at the given position
 
         Args:
             row (int): the given row
             column (int): the given column
-            value (float): the new value
+            value (complex): the new value
         """
         self._matrix[row][column] = value
+        self._columns[column][row] = value
 
     def transposed(self):
         """
@@ -125,7 +126,7 @@ class Matrix:
         """
         return True if self._rows == self._cols else False
     
-    def det(self, recalculate: bool = False) -> float:
+    def det(self, recalculate: bool = False) -> complex | None:
         """Returns the determinator of this Matrix,
         since the determinator is only calculated once
         during construction, optionally recalculates it
@@ -135,7 +136,8 @@ class Matrix:
                 Defaults to False.
 
         Returns:
-            float: the determinator
+            complex: the determinator
+            None: its abscence
         """
         if recalculate:
             self._det = Matrix.__det(self._tolist()) if self.is_square() else None
@@ -236,4 +238,24 @@ class Matrix:
         for i in range(self._rows):
             for j in range(self._cols):
                 self.set(i, j, self.get(i, j) - other.get(i, j))
+    
+    def print(self) -> str:
+        """Rounds the results a bit and returns the matrix
+        in printable str format
+
+        Returns:
+            str: the string to be printed
+        """
+        printed = self._matrix.copy()
+        for line in printed:
+            for i in range(len(line)):
+                if isinstance(line[i], complex):
+                    line[i] = complex(round(line[i].real, 4), round(line[i].imag, 4))
+                    if line[i].imag == 0:
+                        line[i] = line[i].real
+                if isinstance(line[i], float):
+                    if int(line[i]) == line[i]:
+                        line[i] = int(line[i])
+        return('\n'.join([' '.join(map(str, line)) for line in printed]))
+
         
