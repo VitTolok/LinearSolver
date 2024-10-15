@@ -138,7 +138,7 @@ class Matrix:
             float: the determinator
         """
         if recalculate:
-            self._det = Matrix.__det(self._tolist())
+            self._det = Matrix.__det(self._tolist()) if self.is_square() else None
         return self._det
 
 
@@ -194,7 +194,7 @@ class Matrix:
         Returns:
             Matrix: the product
         """
-        if not other is Matrix:
+        if not (isinstance(other, Matrix)):
             return Matrix([[self._matrix[i][j] * other
                             for j in range(self._cols)
                             ] for i in range(self._rows)])

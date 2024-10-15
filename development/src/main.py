@@ -4,5 +4,4 @@ __package__ = "src"
 from Window import Window
 from Solver import Solver
 
-solver = Solver()
-win = Window(solver=solver)
+win = Window(solver=Solver())
