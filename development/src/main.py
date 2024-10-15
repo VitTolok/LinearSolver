@@ -1,6 +1,8 @@
-from GUI.Window import Window
-from calc.Solver import Solver
+__name__ = "src.main"
+__package__ = "src"
+
+from Window import Window
+from Solver import Solver
 
 solver = Solver()
-win = Window()
-win.changeexec(solver.getexec(win))
+win = Window(solver=solver)

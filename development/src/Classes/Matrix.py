@@ -1,5 +1,5 @@
 __name__ = "src.Classes.Matrix"
-
+__package__ = "src"
 def _is_rectangular(matrix: list) -> bool:
     """
     Args:
@@ -25,26 +25,26 @@ def _transpose(matrix: list) -> list:
     return [[matrix[i][j] for i in range(len(matrix))]
             for j in range(len(matrix[0]))]
 
-def __det(matrix: list) -> float:
-    """
-    Calculates the determinator of the given matrix recursively
-    Args:
-        matrix (list): 2D list representation of a square matrix
-
-    Returns:
-        float: its determinator
-    """
-    if len(matrix) == 1:
-        return matrix[0][0]
-    return sum(matrix[i][0]*(-1)**i
-               *__det([row[1:] for row in matrix[:i]+matrix[i+1:]])
-               for i in range(len(matrix)))
-
-
 class Matrix:
     """
     A class for storing and operating Matrixes.
     """
+    def __det(matrix: list) -> float:
+        """
+        Calculates the determinator of the given matrix recursively
+        Args:
+            matrix (list): 2D list representation of a square matrix
+
+        Returns:
+            float: its determinator
+        """
+        if len(matrix) == 1:
+            return matrix[0][0]
+        return sum(matrix[i][0]*(-1)**i
+                *Matrix.__det([row[1:] for row in matrix[:i]+matrix[i+1:]])
+                for i in range(len(matrix)))
+
+
     def __init__(self, array_2d: list):
         """
         Constructs a Matrix from its 2D list representation
@@ -66,8 +66,7 @@ class Matrix:
         self._columns = _transpose(self._matrix)
         self._det = None
         if self._cols == self._rows:
-            self._det = __det(array_2d)
-        return self
+            self._det = Matrix.__det(array_2d)
 
     def _tolist(self) -> list:
         """
@@ -139,7 +138,7 @@ class Matrix:
             float: the determinator
         """
         if recalculate:
-            self._det = __det(self._tolist())
+            self._det = Matrix.__det(self._tolist())
         return self._det
 
 
