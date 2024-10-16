@@ -14,21 +14,45 @@ def _is_rectangular(matrix: list) -> bool:
             return False
     return True
 
-def _transpose(matrix: list) -> list:
-    """
-    Args:
-        matrix (list): 2D list containing the elements of the matrix
 
-    Returns:
-        list: 2D list representation of the transposed matrix
-    """
-    return [[matrix[i][j] for i in range(len(matrix))]
-            for j in range(len(matrix[0]))]
 
 class Matrix:
     """
     A class for storing and operating Matrixes.
     """
+    def read(string: str, comp: bool = True) -> list:
+        """a method for reading matrixes from strings
+
+        Args:
+            string (str): matrix in string
+            comp (bool, optional): whether to make everything complex.
+                Defaults to True.
+
+        Returns:
+            list: matrix in list
+        """
+        string = string.strip()
+        while "\n\n" in string:
+            string = string.replace("\n\n", '\n')
+        lst = string.split('\n')
+        if comp:
+            matrix_2d = [list(map(complex, line.split())) for line in lst]
+        else:
+            matrix_2d = [list(line.split()) for line in lst]
+        return matrix_2d
+    
+
+    def _transpose(matrix: list) -> list:
+        """
+        Args:
+            matrix (list): 2D list containing the elements of the matrix
+
+        Returns:
+            list: 2D list representation of the transposed matrix
+        """
+        return [[matrix[i][j] for i in range(len(matrix))]
+                for j in range(len(matrix[0]))]
+
     def __det(matrix: list) -> complex:
         """
         Calculates the determinator of the given matrix recursively
@@ -60,20 +84,23 @@ class Matrix:
         """
         if not _is_rectangular(array_2d):
             raise Exception
-        self._matrix = array_2d
+        self._matrix = array_2d.copy()
         self._rows = len(self._matrix)
         self._cols = len(self._matrix[0])
-        self._columns = _transpose(self._matrix)
+        self._columns = Matrix._transpose(self._matrix)
         self._det = None
         if self._cols == self._rows:
             self._det = Matrix.__det(array_2d)
 
-    def _tolist(self) -> list:
+    def tolist(self) -> list:
         """
         Returns:
             list: the 2D list represetation of this Matrix
         """
         return self._matrix
+    
+    def columns(self) -> list:
+        return self._columns
     
     def rows(self) -> int:
         """
@@ -140,7 +167,7 @@ class Matrix:
             None: its abscence
         """
         if recalculate:
-            self._det = Matrix.__det(self._tolist()) if self.is_square() else None
+            self._det = Matrix.__det(self.tolist()) if self.is_square() else None
         return self._det
 
 

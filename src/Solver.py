@@ -6,35 +6,59 @@ from Classes.Matrix import Matrix
 class Solver:
     def __init__(self, matrix1: Matrix | None = None,
                  matrix2: Matrix | None = None):
-        self.matrix1 = matrix1
-        self.matrix2 = matrix2
+        self.matrixa = matrix1
+        self.matrixb = matrix2
  
-    def getdet1(self) -> complex:
-        return self.matrix1.det()
+    def getdeta(self) -> complex:
+        return self.matrixa.det()
     
-    def getdet2(self) -> complex:
-        return self.matrix2.det()
+    def getdetb(self) -> complex:
+        return self.matrixb.det()
     
-    def change_matrix1(self, newmatrix: Matrix) -> None:
-        self.matrix1 = newmatrix
+    def change_matrixa(self, newmatrix: Matrix) -> None:
+        self.matrixa = newmatrix
     
-    def change_matrix2(self, newmatrix: Matrix) -> None:
-        self.matrix2 = newmatrix
+    def change_matrixb(self, newmatrix: Matrix) -> None:
+        self.matrixb = newmatrix
     
     def getsum(self):
-        return self.matrix1 + self.matrix2
+        return self.matrixa + self.matrixb
     
     def getsub(self):
-        return self.matrix1 - self.matrix2
+        return self.matrixa - self.matrixb
     
     def getmult(self):
-        if self.matrix2.cols() == self.matrix2.rows() == 1:
-            return self.matrix1 * self.matrix2.det()
-        elif self.matrix1.cols() == self.matrix1.rows() == 1:
-            return self.matrix2 * self.matrix1.det()
-        return self.matrix1 * self.matrix2
+        if self.matrixb.cols() == self.matrixb.rows() == 1:
+            return self.matrixa * self.matrixb.det()
+        elif self.matrixa.cols() == self.matrixa.rows() == 1:
+            return self.matrixb * self.matrixa.det()
+        return self.matrixa * self.matrixb
     
     def getdiv(self):
-        if self.matrix2.cols() == self.matrix2.rows() == 1:
-            return self.matrix1 / self.matrix2.det()
-        return self.matrix1 / self.matrix2
+        if not self.matrixb.is_square():
+            raise Exception
+        e = Matrix([[(1+0j) if i == j else (0j)
+                      for j in range(self.matrixb.cols())]
+                      for i in range(self.matrixb.cols())])
+        tempsolver = Solver(self.matrixb, e)
+        return self.matrixa * tempsolver.linsolve()
+    
+    def linsolve(self):
+        if not self.matrixa.is_square():
+            raise Exception
+        if self.matrixa.rows() != self.matrixb.rows():
+            raise Exception
+        if self.matrixa.det() == complex(0):
+            return None
+        matrixx = Matrix([[complex(0) for j in range(self.matrixb.cols())]
+                          for i in range(self.matrixb.rows())])
+        for i in range(matrixx.rows()):
+            for j in range(matrixx.cols()):
+                matrixaij = Matrix(Matrix._transpose(
+                                   self.matrixa.columns()[:i]
+                                   + [self.matrixb.columns()[j]]
+                                   + self.matrixa.columns()[i+1:]))
+                matrixx.set(i, j, matrixaij.det()/self.matrixa.det())
+        matrixx.det(True)
+        return matrixx
+        
