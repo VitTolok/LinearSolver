@@ -32,5 +32,9 @@ class Solver:
             return self.matrix1 * self.matrix2.det()
         elif self.matrix1.cols() == self.matrix1.rows() == 1:
             return self.matrix2 * self.matrix1.det()
-        else:
-            return self.matrix1 * self.matrix2
+        return self.matrix1 * self.matrix2
+    
+    def getdiv(self):
+        if self.matrix2.cols() == self.matrix2.rows() == 1:
+            return self.matrix1 / self.matrix2.det()
+        return self.matrix1 / self.matrix2

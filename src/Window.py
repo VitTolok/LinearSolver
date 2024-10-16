@@ -80,7 +80,7 @@ class Window:
         lst1 = str1.split('\n')
         lst2 = str2.split('\n')
         operation_str = self.ari_input.get()
-        if not (operation_str in ['+', '-', '*']):
+        if not (operation_str in ['+', '-', '*', '/']):
             self.output_text.delete("1.0", "end-1c")
             self.output_text.insert("1.0", "invalid operation")
             return
@@ -92,8 +92,10 @@ class Window:
             matrix_result = self.solver.getsum()
         elif operation_str == '-':
             matrix_result = self.solver.getsub()
-        else:
+        elif operation_str == '*':
             matrix_result = self.solver.getmult()
+        else:
+            matrix_result = self.solver.getdiv()
         result = matrix_result.print()
         self.output_text.delete("1.0", "end-1c")
         self.output_text.insert("1.0", result)

@@ -257,5 +257,24 @@ class Matrix:
                     if int(line[i]) == line[i]:
                         line[i] = int(line[i])
         return('\n'.join([' '.join(map(str, line)) for line in printed]))
+    
+    def __truediv__(self, other):
+        """Matrix division by inverted matrix multiplication
+        Args:
+            other (Matrix | complex): the thing to divide self by
+        Raises:
+            Exception: Divisor matrix has to be square
+            and have the same number of rows as self has columns
+        Returns:
+            Matrix: the result of the division
+        """
+        if not (isinstance(other, Matrix)):
+            return self * (1 / other)
+        if (not other.is_square() or self.cols()!=other.rows()):
+            raise Exception
+        det = other.det()
+        other = other.transposed()
+        other = other / det
+        return self * other
 
         
