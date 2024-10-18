@@ -1,5 +1,3 @@
-__name__ = "src.Classes.Matrix"
-__package__ = "src"
 def _is_rectangular(matrix: list) -> bool:
     """
     Args:
@@ -153,6 +151,9 @@ class Matrix:
         """
         return True if self._rows == self._cols else False
     
+    def copy(self):
+        return Matrix([line.copy() for line in self._matrix])
+    
     def det(self, recalculate: bool = False) -> complex | None:
         """Returns the determinator of this Matrix,
         since the determinator is only calculated once
@@ -277,7 +278,7 @@ class Matrix:
         for line in printed:
             for i in range(len(line)):
                 if isinstance(line[i], complex):
-                    line[i] = complex(round(line[i].real, 4), round(line[i].imag, 4))
+                    line[i] = complex(round(line[i].real, 6), round(line[i].imag, 6))
                     if line[i].imag == 0:
                         line[i] = line[i].real
                 if isinstance(line[i], float):
@@ -285,23 +286,20 @@ class Matrix:
                         line[i] = int(line[i])
         return('\n'.join([' '.join(map(str, line)) for line in printed]))
     
-    def __truediv__(self, other):
-        """Matrix division by inverted matrix multiplication
+    def __truediv__(self, other: complex):
+        """Matrix division by number
+        inverted matrix multiplication only implemented
+        through solver
         Args:
-            other (Matrix | complex): the thing to divide self by
+            other (complex): the thing to divide self by
         Raises:
-            Exception: Divisor matrix has to be square
-            and have the same number of rows as self has columns
+            Exception: divisor not complex
         Returns:
             Matrix: the result of the division
         """
-        if not (isinstance(other, Matrix)):
+        if (isinstance(other, complex)):
             return self * (1 / other)
-        if (not other.is_square() or self.cols()!=other.rows()):
+        else:
             raise Exception
-        det = other.det()
-        other = other.transposed()
-        other = other / det
-        return self * other
 
         

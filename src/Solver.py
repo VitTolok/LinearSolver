@@ -1,7 +1,6 @@
-__name__ = "src.Solver"
-__package__ = "src"
-
 from Classes.Matrix import Matrix
+from Classes.Vector import Vector
+import Classes
 
 class Solver:
     def __init__(self, matrix1: Matrix | None = None,
@@ -21,20 +20,26 @@ class Solver:
     def change_matrixb(self, newmatrix: Matrix) -> None:
         self.matrixb = newmatrix
     
-    def getsum(self):
+    def change_vectora(self, newvector: Vector) -> None:
+        self.vectora = newvector.copy()
+    
+    def change_vectorb(self, newvector: Vector) -> None:
+        self.vectorb = newvector.copy()
+
+    def getsummat(self):
         return self.matrixa + self.matrixb
     
-    def getsub(self):
+    def getsubmat(self):
         return self.matrixa - self.matrixb
     
-    def getmult(self):
+    def getmultmat(self):
         if self.matrixb.cols() == self.matrixb.rows() == 1:
             return self.matrixa * self.matrixb.det()
         elif self.matrixa.cols() == self.matrixa.rows() == 1:
             return self.matrixb * self.matrixa.det()
         return self.matrixa * self.matrixb
     
-    def getdiv(self):
+    def getdivmat(self):
         if not self.matrixb.is_square():
             raise Exception
         e = Matrix([[(1+0j) if i == j else (0j)
@@ -61,4 +66,13 @@ class Solver:
                 matrixx.set(i, j, matrixaij.det()/self.matrixa.det())
         matrixx.det(True)
         return matrixx
+    
+    def transmat(self):
+        tempsolve = Solver(self.matrixb, self.matrixa)
+        return tempsolve.linsolve()
+    
+    def transvec(self):
+        transmat = self.transmat()
+        return transmat * self.vectora.tomatrix()
+
         

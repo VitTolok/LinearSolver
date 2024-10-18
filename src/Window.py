@@ -1,9 +1,7 @@
-__name__ = "src.Window"
-__package__ = "src"
-
 import tkinter as tk
 from Solver import Solver
 from Classes.Matrix import Matrix
+from Classes.Vector import Vector
 
 class Window:
     
@@ -14,25 +12,34 @@ class Window:
                                  baseName="LinSol",
                                  className="LinearSolverV0_1")
         self.init_det_b = tk.Button(self.window, text="determinator",
-                                    command=self.init_det)
+                                    command=self.init_det,
+                                    activebackground="green")
         self.init_det_b.grid(row=0, column=0)
         self.init_ari_b = tk.Button(self.window, text="matrix arithmetics",
-                                    command=self.init_ari)
+                                    command=self.init_ari,
+                                    activebackground="green")
         self.init_ari_b.grid(row=1, column=0)
         self.init_linsolve_b = tk.Button(self.window, text="Linear Equations",
-                                        command=self.init_linsolve)
+                                        command=self.init_linsolve,
+                                        activebackground="green")
         self.init_linsolve_b.grid(row=2, column=0)
+        self.init_trans_b = tk.Button(self.window, text="Basis transitions",
+                                        command=self.init_trans,
+                                        activebackground="green")
+        self.init_trans_b.grid(row=3, column=0)
         self.window.mainloop()
     
     def __noinit(self):
         self.det_is_init = False
         self.ari_is_init = False
         self.linsolve_is_init = False
+        self.trans_is_init = False
     
     def kys(self):
         self.deinit_det()
         self.deinit_ari()
         self.deinit_linsolve()
+        self.deinit_trans()
 
     def write(output: tk.Text, text: str) -> None:
             output.delete("1.0", "end-1c")
@@ -58,6 +65,7 @@ class Window:
     def init_det(self):
         self.kys()
         self.det_is_init = True
+        self.init_det_b.configure(fg="green")
         self.input_label = tk.Label(self.window, text="Input square matrix:")
         self.input_label.grid(row=0, column=1)
         self.text_input = tk.Text(self.window, height=10, width=30)
@@ -70,6 +78,7 @@ class Window:
     
     def deinit_det(self):
         if self.det_is_init:
+            self.init_det_b.configure(fg="black")
             self.input_label.destroy()
             self.text_input.destroy()
             self.answer_message.destroy()
@@ -87,13 +96,13 @@ class Window:
             self.solver.change_matrixa(Matrix(matrix2d1))
             self.solver.change_matrixb(Matrix(matrix2d2))
             if operation_str == '+':
-                matrix_result = self.solver.getsum()
+                matrix_result = self.solver.getsummat()
             elif operation_str == '-':
-                matrix_result = self.solver.getsub()
+                matrix_result = self.solver.getsubmat()
             elif operation_str == '*':
-                matrix_result = self.solver.getmult()
+                matrix_result = self.solver.getmultmat()
             else:
-                matrix_result = self.solver.getdiv()
+                matrix_result = self.solver.getdivmat()
             result = matrix_result.print()
             self.output_text.delete("1.0", "end-1c")
             self.output_text.insert("1.0", result)
@@ -103,6 +112,7 @@ class Window:
     def init_ari(self):
         self.kys()
         self.ari_is_init = True
+        self.init_ari_b.configure(fg="green")
         self.ari_label = tk.Label(self.window, text="Enter +, - or * below (or even /)")
         self.ari_label.grid(row=0, column=2)
         self.text_input1 = tk.Text(self.window, height=10, width=30)
@@ -121,6 +131,7 @@ class Window:
 
     def deinit_ari(self):
         if self.ari_is_init:
+            self.init_ari_b.configure(fg="black")
             self.ari_label.destroy()
             self.text_input1.destroy()
             self.ari_input.destroy()
@@ -133,6 +144,7 @@ class Window:
     def init_linsolve(self):
         self.kys()
         self.linsolve_is_init = True
+        self.init_linsolve_b.configure(fg="green")
         self.combo_label = tk.Label(self.window, text="Input Multiplicators")
         self.combo_label.grid(row=0, column=1)
         self.text_input1 = tk.Text(self.window, height=10, width=30)
@@ -155,6 +167,7 @@ class Window:
     
     def deinit_linsolve(self):
         if self.linsolve_is_init:
+            self.init_linsolve_b.configure(fg="black")
             self.combo_label.destroy()
             self.text_input1.destroy()
             self.var_label.destroy()
@@ -180,3 +193,103 @@ class Window:
             Window.write(self.text_output, result)
         except:
             Window.write(self.text_output, "Invalid input")
+    
+    def init_trans(self):
+        self.kys()
+        self.trans_is_init = True
+        self.init_trans_b.configure(fg="green")
+        self.basis_known_b = tk.Button(self.window, text="Basis known",
+                                       command=self.init_trans_basis_known,
+                                       fg="green")
+        self.basis_known_b.grid(row=0, column=1)
+        self.basis_unknown_b = tk.Button(self.window, text="Points known",
+                                       command=self.init_trans_basis_unknown)
+        self.basis_unknown_b.grid(row=1, column=1)
+        self.text_input1 = tk.Text(self.window, height=10, width=30)
+        self.text_input1.grid(row=1, column=2)
+        self.text_input2 = tk.Text(self.window, height=10, width=30)
+        self.text_input2.grid(row=1, column=3)
+        self.text_input3 = tk.Text(self.window, height=10, width=30)
+        self.text_input3.grid(row=1, column=4)
+        self.text_output = tk.Text(self.window, height=10, width=30)
+        self.text_output.grid(row=2, column=3)
+        self.trans_label1 = tk.Label(self.window, text="First Basis:")
+        self.trans_label1.grid(row=0, column=2)
+        self.trans_label2 = tk.Label(self.window,
+                                     text="Vector in first basis:\n(Nothing for transition matrix)")
+        self.trans_label2.grid(row=0, column=3)
+        self.trans_label3 = tk.Label(self.window, text="Second Basis:")
+        self.trans_label3.grid(row=0, column=4)
+        self.execute_b = tk.Button(self.window, text="Execute",
+                                   command=self.exectrans)
+        self.execute_b.grid(row=2, column=4)
+
+    def init_trans_basis_unknown(self):
+        self.trans_label1.destroy()
+        self.trans_label2.destroy()
+        self.trans_label3.destroy()
+        self.execute_b.destroy()
+        self.basis_known_b.configure(fg="black")
+        self.basis_unknown_b.configure(fg="green")
+        self.trans_label1 = tk.Label(self.window, text="Known common points in basis 1:")
+        self.trans_label1.grid(row=0, column=2)
+        self.trans_label2 = tk.Label(self.window,
+                                     text="Vector in first basis:\n(Nothing for transition matrix)")
+        self.trans_label2.grid(row=0, column=3)
+        self.trans_label3 = tk.Label(self.window, text="Known common points in basis 2:")
+        self.trans_label3.grid(row=0, column=4)
+        self.execute_b = tk.Button(self.window, text="Execute",
+                                   command=self.execuktrans)
+        self.execute_b.grid(row=2, column=4)
+
+    def init_trans_basis_known(self):
+        self.trans_label1.destroy()
+        self.trans_label2.destroy()
+        self.trans_label3.destroy()
+        self.execute_b.destroy()
+        self.basis_known_b.configure(fg="green")
+        self.basis_unknown_b.configure(fg="black")
+        self.trans_label1 = tk.Label(self.window, text="First Basis:")
+        self.trans_label1.grid(row=0, column=2)
+        self.trans_label2 = tk.Label(self.window,
+                                     text="Vector in first basis:\n(Nothing for transition matrix)")
+        self.trans_label2.grid(row=0, column=3)
+        self.trans_label3 = tk.Label(self.window, text="Second Basis:")
+        self.trans_label3.grid(row=0, column=4)
+        self.execute_b = tk.Button(self.window, text="Execute",
+                                   command=self.exectrans)
+        self.execute_b.grid(row=2, column=4)
+
+    def deinit_trans(self):
+        if self.trans_is_init:
+            self.trans_is_init = False
+            self.init_trans_b.configure(fg="black")
+            self.basis_known_b.destroy()
+            self.basis_unknown_b.destroy()
+            self.text_input1.destroy()
+            self.text_input2.destroy()
+            self.text_input3.destroy()
+            self.text_output.destroy()
+            self.trans_label1.destroy()
+            self.trans_label2.destroy()
+            self.trans_label3.destroy()
+            self.execute_b.destroy()
+
+    def exectrans(self):
+        try:
+            basis1 = Matrix(Matrix.read(self.text_input1.get("1.0", "end-1c")))
+            veclst = self.text_input2.get("1.0", "end-1c").split()
+            basis2 = Matrix(Matrix.read(self.text_input3.get("1.0", "end-1c")))
+            self.solver.change_matrixa(basis1)
+            self.solver.change_matrixb(basis2)
+            if veclst == [] or veclst == ['']:
+                Window.write(self.text_output, self.solver.transmat().print())
+            else:
+                vector = Vector(veclst, basis1)
+                self.solver.change_vectora(vector)
+                Window.write(self.text_output, self.solver.transvec().print())
+        except Exception:
+            Window.write(self.text_output, "Invalid input")
+
+    def execuktrans(self):
+        pass
