@@ -23,6 +23,16 @@ class Vector:
                 raise Exception
         else:
             raise Exception
+    
+    def __sub__(self, other):
+        if isinstance(other, Vector):
+            if self.base() == other.base():
+                return Vector([self.__coords[i] - other.__coords[i]
+                               for i in range(len(self))])
+            else:
+                raise Exception
+        else:
+            raise Exception
 
     def base(self):
             return self.__base.copy()

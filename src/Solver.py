@@ -74,5 +74,15 @@ class Solver:
     def transvec(self):
         transmat = self.transmat()
         return transmat * self.vectora.tomatrix()
+    
+    def transpoints(self):
+        pointsa = list(map(Vector, self.matrixa.columns()))
+        pointsb = list(map(Vector, self.matrixb.columns()))
+        vectorsa = [pointsa[i+1] - pointsa[0] for i in range(len(pointsa) - 1)]
+        vectorsb = [pointsb[i+1] - pointsb[0] for i in range(len(pointsb) - 1)]
+        tempsolver = Solver(Matrix([vector.tolist() for vector in vectorsa]).transposed(),
+                            Matrix([vector.tolist() for vector in vectorsb]).transposed())
+        transmat = tempsolver.linsolve()
+        return pointsb[0].tomatrix() + transmat * (self.vectora - pointsa[0]).tomatrix()
 
         

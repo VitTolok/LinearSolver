@@ -234,6 +234,24 @@ class Matrix:
                              for k in range(self._cols)])
                              for j in range(other._cols)]
                              for i in range(self._rows)])
+    
+    def __eq__(self, other) -> bool:
+        """Checks if matrixes are the same
+        Args:
+            other (Matrix): the other matrix
+        Returns:
+            bool: whether they are the same or not
+        """
+        if isinstance(other, Matrix):
+            if self.cols() == other.cols():
+                if self.rows() == other.rows():
+                    for i in range(self.rows()):
+                        for j in range(self.cols()):
+                            if self._matrix[i][j] != other._matrix[i][j]:
+                                return False
+                    return True
+        return False
+
 
     def __iadd__(self, other) -> None:
         """Adds the other matrix to this one

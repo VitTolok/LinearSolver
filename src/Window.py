@@ -252,7 +252,7 @@ class Window:
         self.trans_label1 = tk.Label(self.window, text="First Basis:")
         self.trans_label1.grid(row=0, column=2)
         self.trans_label2 = tk.Label(self.window,
-                                     text="Vector in first basis:\n(Nothing for transition matrix)")
+                                     text="Point in first CS:")
         self.trans_label2.grid(row=0, column=3)
         self.trans_label3 = tk.Label(self.window, text="Second Basis:")
         self.trans_label3.grid(row=0, column=4)
@@ -292,4 +292,12 @@ class Window:
             Window.write(self.text_output, "Invalid input")
 
     def execuktrans(self):
-        pass
+        try:
+            self.solver.change_matrixa(Matrix(Matrix.read(
+                                       self.text_input1.get("1.0", "end-1c"))))
+            self.solver.change_vectora(Vector(self.text_input2.get("1.0", "end-1c").split()))
+            self.solver.change_matrixb(Matrix(Matrix.read(
+                                       self.text_input3.get("1.0", "end-1c"))))
+            Window.write(self.text_output, self.solver.transpoints().print())
+        except Exception:
+            Window.write(self.text_output, "Invalid input")
