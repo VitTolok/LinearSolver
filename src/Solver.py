@@ -3,43 +3,92 @@ from Classes.Vector import Vector
 import Classes
 
 class Solver:
+    """A class for calculating algorithms"""
+
     def __init__(self, matrix1: Matrix | None = None,
                  matrix2: Matrix | None = None):
-        self.matrixa = matrix1
-        self.matrixb = matrix2
+        """Creates a solver and (optionally) writes down two matrixes
+        Args:
+            matrix1 (Matrix | None, optional): the first matrix. Defaults to None.
+            matrix2 (Matrix | None, optional): the second matrix. Defaults to None.
+        """
+        self.matrixa = matrix1.copy() if isinstance(matrix1, Matrix) else Matrix([[0]])
+        self.matrixb = matrix2.copy() if isinstance(matrix2, Matrix) else Matrix([[0]])
  
     def getdeta(self) -> complex:
+        """
+        Returns:
+            complex: the determinator of the first stored matrix
+        """
         return self.matrixa.det()
     
     def getdetb(self) -> complex:
+        """
+        Returns:
+            complex: the determinator of the second stored matrix
+        """
         return self.matrixb.det()
     
     def change_matrixa(self, newmatrix: Matrix) -> None:
-        self.matrixa = newmatrix
+        """Changes the first stored matrix for a new one
+        Args:
+            newmatrix (Matrix): the new matrix to store
+        """
+        self.matrixa = newmatrix.copy()
     
     def change_matrixb(self, newmatrix: Matrix) -> None:
-        self.matrixb = newmatrix
+        """Changes the second stored matrix for a new one
+        Args:
+            newmatrix (Matrix): the new matrix to store
+        """
+        self.matrixb = newmatrix.copy()
     
     def change_vectora(self, newvector: Vector) -> None:
+        """changes the first stored vector for a new one
+        Args:
+            newvector (Vector): the new vector
+        """
         self.vectora = newvector.copy()
     
     def change_vectorb(self, newvector: Vector) -> None:
+        """changes the second stored vector for a new one
+        Args:
+            newvector (Vector): the new vector
+        """
         self.vectorb = newvector.copy()
 
-    def getsummat(self):
+    def getsummat(self) -> Matrix:
+        """
+        Returns:
+            Matrix: the sum of the stored matrixes
+        """
         return self.matrixa + self.matrixb
     
-    def getsubmat(self):
+    def getsubmat(self) -> Matrix:
+        """
+        Returns:
+            Matrix: the first stored matrix minus th second one
+        """
         return self.matrixa - self.matrixb
     
-    def getmultmat(self):
+    def getmultmat(self) -> Matrix:
+        """
+        Returns:
+            Matrix: the product of the stored matrixes, one of them can also store one number
+        """
         if self.matrixb.cols() == self.matrixb.rows() == 1:
             return self.matrixa * self.matrixb.det()
         elif self.matrixa.cols() == self.matrixa.rows() == 1:
             return self.matrixb * self.matrixa.det()
         return self.matrixa * self.matrixb
     
-    def getdivmat(self):
+    def getdivmat(self) -> Matrix:
+        """Matrix division by inverted matrix multiplication
+        Raises:
+            Exception: the divisor must be square
+        Returns:
+            Matrix: the result of the division
+        """
         if not self.matrixb.is_square():
             raise Exception
         e = Matrix([[(1+0j) if i == j else (0j)
@@ -48,7 +97,14 @@ class Solver:
         tempsolver = Solver(self.matrixb, e)
         return self.matrixa * tempsolver.linsolve()
     
-    def linsolve(self):
+    def linsolve(self) -> Matrix:
+        """An algorithm that provides a matrix X such that AX=B
+        Raises:
+            Exception: Matrix A has to be square
+            Exception: Matrixes A and B have to have the same number of rows
+        Returns:
+            Matrix: matrix X
+        """
         if not self.matrixa.is_square():
             raise Exception
         if self.matrixa.rows() != self.matrixb.rows():
@@ -67,15 +123,29 @@ class Solver:
         matrixx.det(True)
         return matrixx
     
-    def transmat(self):
+    def transmat(self) -> Matrix:
+        """Calculates the transition Matrix from basis A to basis B
+        Returns:
+            Matrix: the transition Matrix
+        """
         tempsolve = Solver(self.matrixb, self.matrixa)
         return tempsolve.linsolve()
     
-    def transvec(self):
+    def transvec(self) -> Matrix:
+        """transitions vector from basis A coords to basis B coords
+        Returns:
+            Matrix: one column containing the result
+        """
         transmat = self.transmat()
         return transmat * self.vectora.tomatrix()
     
-    def transpoints(self):
+    def transpoints(self) -> Matrix:
+        """Transitions a vector from one coordinate system to another
+        based on the common points they have, points are stored in matrixes
+        A and B, ther has to be N+1 points for systems of N dimensions
+        Returns:
+            Matrix: one column containing the resulting vector
+        """
         pointsa = list(map(Vector, self.matrixa.columns()))
         pointsb = list(map(Vector, self.matrixb.columns()))
         vectorsa = [pointsa[i+1] - pointsa[0] for i in range(len(pointsa) - 1)]

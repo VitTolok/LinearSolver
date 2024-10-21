@@ -15,17 +15,27 @@ def _is_rectangular(matrix: list) -> bool:
 
 
 class Matrix:
-    """
-    A class for storing and operating Matrixes.
-    """
+    """A class for storing and operating Matrixes."""
+
+    def _is_rectangular(matrix: list) -> bool:
+        """
+        Args:
+            matrix (list): A 2D list, containing all the elements of the matrix
+        Returns:
+            bool: whether or not all rows have the same number of elements
+        """
+        length = len(matrix[0])
+        for row in matrix:
+            if len(row) != length:
+                return False
+        return True
+    
     def read(string: str, comp: bool = True) -> list:
         """a method for reading matrixes from strings
-
         Args:
             string (str): matrix in string
             comp (bool, optional): whether to make everything complex.
                 Defaults to True.
-
         Returns:
             list: matrix in list
         """
@@ -44,7 +54,6 @@ class Matrix:
         """
         Args:
             matrix (list): 2D list containing the elements of the matrix
-
         Returns:
             list: 2D list representation of the transposed matrix
         """
@@ -52,11 +61,9 @@ class Matrix:
                 for j in range(len(matrix[0]))]
 
     def __det(matrix: list) -> complex:
-        """
-        Calculates the determinator of the given matrix recursively
+        """Calculates the determinator of the given matrix recursively
         Args:
             matrix (list): 2D list representation of a square matrix
-
         Returns:
             complex: its determinator
         """
@@ -68,15 +75,11 @@ class Matrix:
 
 
     def __init__(self, array_2d: list):
-        """
-        Constructs a Matrix from its 2D list representation
-
+        """Constructs a Matrix from its 2D list representation
         Args:
             array_2d (list): 2D list representation of the matrix
-
         Raises:
             Exception: the 2D list representation isn't rectangular
-
         Returns:
             Matrix: the constructed Matrix
         """
@@ -98,6 +101,10 @@ class Matrix:
         return self._matrix
     
     def columns(self) -> list:
+        """
+        Returns:
+            list: list containing columns of this matrix as lists
+        """
         return self._columns
     
     def rows(self) -> int:
@@ -116,11 +123,9 @@ class Matrix:
 
     def get(self, row: int, column: int) -> complex:
         """Fetches the value from a given position
-
         Args:
             row (int): the needed row, iterated from 0
             column (int): the needed column, iterated from 0
-
         Returns:
             complex: the needed value
         """
@@ -128,7 +133,6 @@ class Matrix:
     
     def set(self, row: int, column: int, value: complex) -> None:
         """Changes the value at the given position
-
         Args:
             row (int): the given row
             column (int): the given column
@@ -152,17 +156,19 @@ class Matrix:
         return True if self._rows == self._cols else False
     
     def copy(self):
+        """
+        Returns:
+            Matrix: a copy of this matrix
+        """
         return Matrix([line.copy() for line in self._matrix])
     
     def det(self, recalculate: bool = False) -> complex | None:
         """Returns the determinator of this Matrix,
         since the determinator is only calculated once
         during construction, optionally recalculates it
-
         Args:
             recalculate (bool, optional): Whether to recalculate.
                 Defaults to False.
-
         Returns:
             complex: the determinator
             None: its abscence
@@ -174,13 +180,10 @@ class Matrix:
 
     def __add__(self, other):
         """Matrix addition
-
         Args:
             other (Matrix): a same-sized matrix
-
         Raises:
             Exception: the matrixes aren't of the same size
-
         Returns:
             Matrix: the sum of the two matrixes
         """
@@ -194,13 +197,10 @@ class Matrix:
     def __sub__(self, other):
         """subtracts the second matrix from the first one
         does not change any of them, only returns the result
-
         Args:
             other (Matrix): the matrix to subtract
-
         Raises:
             Exception: the matrixes aren't of the same size
-
         Returns:
             Matrix: the result of the subtraction
         """
@@ -213,14 +213,11 @@ class Matrix:
     
     def __mul__(self, other):
         """Calculates the product of the two matrixes
-
         Args:
             other (Matrix): the other matrix
-
         Raises:
             Exception: the matrixes can't be multiplied
                 because of their dimensions
-
         Returns:
             Matrix: the product
         """
@@ -255,10 +252,8 @@ class Matrix:
 
     def __iadd__(self, other) -> None:
         """Adds the other matrix to this one
-
         Args:
             other (Matrix): the other matrix
-
         Raises:
             Exception: the matrixes aren't of the same size
         """
@@ -271,10 +266,8 @@ class Matrix:
     
     def __isub__(self, other) -> None:
         """Subtracts another matrix from this one
-
         Args:
             other (Matrix): the other matrix
-
         Raises:
             Exception: the matrixes aren't of the same size
         """
@@ -288,7 +281,6 @@ class Matrix:
     def print(self) -> str:
         """Rounds the results a bit and returns the matrix
         in printable str format
-
         Returns:
             str: the string to be printed
         """

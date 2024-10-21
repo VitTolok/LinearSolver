@@ -4,10 +4,14 @@ from Classes.Matrix import Matrix
 from Classes.Vector import Vector
 
 class Window:
-    
-    def __init__(self, solver: Solver):
+    """A class for operating GUI, including reading, writing,
+    conversion of data for further calculation, calling for calculation
+    """
+    def __init__(self):
+        """Creates a new window with base GUI and a Solver entity
+        """
         self.__noinit()
-        self.solver = solver
+        self.solver = Solver()
         self.window = tk.Tk(screenName="LinearSolver",
                                  baseName="LinSol",
                                  className="LinearSolverV0_1")
@@ -29,23 +33,36 @@ class Window:
         self.init_trans_b.grid(row=3, column=0)
         self.window.mainloop()
     
-    def __noinit(self):
+    def __noinit(self) -> None:
+        """Declares all GUI parts as uninitialised
+        """
         self.det_is_init = False
         self.ari_is_init = False
         self.linsolve_is_init = False
         self.trans_is_init = False
     
-    def kys(self):
+    def kys(self) -> None:
+        """Deinitialises all gui parts, removing them from the window
+        """
         self.deinit_det()
         self.deinit_ari()
         self.deinit_linsolve()
         self.deinit_trans()
 
     def write(output: tk.Text, text: str) -> None:
-            output.delete("1.0", "end-1c")
-            output.insert("1.0", text)
+        """Writes the string of text into a Text widjet,
+        removing everything else from it
+        Args:
+            output (tk.Text): the target Text widjet
+            text (str): the string to write
+        """
+        output.delete("1.0", "end-1c")
+        output.insert("1.0", text)
 
-    def execdet(self):
+    def execdet(self) -> None:
+        """Commences determinant calculation by reading the matrix and calling solver
+        The det part of the gui has to be init
+        """
         matrix_2d = Matrix.read(self.text_input.get("1.0", "end-1c"))
         try:
             self.solver.change_matrixa(Matrix(matrix_2d))
@@ -62,7 +79,9 @@ class Window:
             self.answer_message.config(text="Invalid Input")
     
 
-    def init_det(self):
+    def init_det(self) -> None:
+        """Initialises the det calculation part of the GUI
+        """
         self.kys()
         self.det_is_init = True
         self.init_det_b.configure(fg="green")
@@ -76,7 +95,9 @@ class Window:
                                    width=15, command=self.execdet)
         self.execute_b.grid(row=1, column=2)
     
-    def deinit_det(self):
+    def deinit_det(self) -> None:
+        """Deinitialises the det calculation part of the GUI
+        """
         if self.det_is_init:
             self.init_det_b.configure(fg="black")
             self.input_label.destroy()
@@ -85,7 +106,10 @@ class Window:
             self.execute_b.destroy()
             self.det_is_init = False
 
-    def execari(self):
+    def execari(self) -> None:
+        """Commences matrix arithmetics by calling the appropriate solver algo
+        ari part of the GUI has to be init
+        """
         matrix2d1 = Matrix.read(self.text_input1.get("1.0", "end-1c"))
         matrix2d2 = Matrix.read(self.text_input2.get("1.0", "end-1c"))
         operation_str = self.ari_input.get()
@@ -110,6 +134,8 @@ class Window:
             Window.write(self.output_text, "Invalid input")
 
     def init_ari(self):
+        """inits the ari part of the GUI
+        """
         self.kys()
         self.ari_is_init = True
         self.init_ari_b.configure(fg="green")
@@ -130,6 +156,8 @@ class Window:
         self.output_text.grid(row=2, column=2)
 
     def deinit_ari(self):
+        """deinits the ari part of the GUI
+        """
         if self.ari_is_init:
             self.init_ari_b.configure(fg="black")
             self.ari_label.destroy()
@@ -142,6 +170,8 @@ class Window:
             self.ari_is_init = False
     
     def init_linsolve(self):
+        """inits the linsolve part of the gui
+        """
         self.kys()
         self.linsolve_is_init = True
         self.init_linsolve_b.configure(fg="green")
@@ -166,6 +196,8 @@ class Window:
         self.execute_b.grid(row=2, column=3)
     
     def deinit_linsolve(self):
+        """deinits the linsolve part of the GUI
+        """
         if self.linsolve_is_init:
             self.init_linsolve_b.configure(fg="black")
             self.combo_label.destroy()
@@ -180,6 +212,8 @@ class Window:
             self.linsolve_is_init = False
     
     def execlinsolve(self):
+        """Commences solution of a linear system by calling Solver
+        """
         combo2d = Matrix.read(self.text_input1.get("1.0", "end-1c"))
         varnames = Matrix.read(self.text_input2.get("1.0", "end-1c"), False)
         consts = Matrix.read(self.text_input3.get("1.0", "end-1c"))
@@ -195,6 +229,8 @@ class Window:
             Window.write(self.text_output, "Invalid input")
     
     def init_trans(self):
+        """inits trans part of the GUI
+        """
         self.kys()
         self.trans_is_init = True
         self.init_trans_b.configure(fg="green")
@@ -225,6 +261,8 @@ class Window:
         self.execute_b.grid(row=2, column=4)
 
     def init_trans_basis_unknown(self):
+        """inits trans_buk subpart of trans GUI
+        """
         self.trans_label1.destroy()
         self.trans_label2.destroy()
         self.trans_label3.destroy()
@@ -243,6 +281,8 @@ class Window:
         self.execute_b.grid(row=2, column=4)
 
     def init_trans_basis_known(self):
+        """inits trans_bk subpart of trans GUI
+        """
         self.trans_label1.destroy()
         self.trans_label2.destroy()
         self.trans_label3.destroy()
@@ -261,6 +301,8 @@ class Window:
         self.execute_b.grid(row=2, column=4)
 
     def deinit_trans(self):
+        """deinits trans part of the GUI
+        """
         if self.trans_is_init:
             self.trans_is_init = False
             self.init_trans_b.configure(fg="black")
@@ -276,6 +318,8 @@ class Window:
             self.execute_b.destroy()
 
     def exectrans(self):
+        """Commences vector basis transition by calling Solver
+        """
         try:
             basis1 = Matrix(Matrix.read(self.text_input1.get("1.0", "end-1c")))
             veclst = self.text_input2.get("1.0", "end-1c").split()
@@ -292,6 +336,8 @@ class Window:
             Window.write(self.text_output, "Invalid input")
 
     def execuktrans(self):
+        """Commences Point coordinate system transition by calling solver
+        """
         try:
             self.solver.change_matrixa(Matrix(Matrix.read(
                                        self.text_input1.get("1.0", "end-1c"))))
