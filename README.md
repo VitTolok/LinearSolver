@@ -9,6 +9,9 @@ It was made entirely by me, @VitTolok.
 ## How to run
 
 If not already installed, install tkinter:
+
 pip install tkinter
+
 Run main.py:
+
 python3 main.py

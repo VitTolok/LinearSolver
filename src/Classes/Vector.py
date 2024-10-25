@@ -16,9 +16,7 @@ class Vector:
         """
         self.__coords = list(map(complex, coordinates.copy()))
         if base is None:
-            self.__base = Matrix([[1 if i == j else 0
-                          for j in range(len(coordinates))]
-                          for i in range(len(coordinates))])
+            self.__base = Matrix.e(len(coordinates))
         elif len(base.tolist())!=len(coordinates):
             raise Exception
         else:
@@ -115,13 +113,46 @@ class Vector:
         Returns:
             bool: whether the basis is ortho
         """
-        return (self.base() * self.tomatrix() == self.tomatrix())
+        return (self.base() == Matrix.e(len(self)))
     
     def to_ortho(self):
         """
         Returns:
             Vector: self in orthogonal unit basis
         """
-        return Vector(line[0] for line in 
-                      (self.base()*self.tomatrix()).tolist())
+        return Vector((self.base()*self.tomatrix()).tolist())
+    
+    def scal_mult(self, other) -> complex:
+        """scalar product, same basis
+        Args:
+            other (Vector): the second Vector
+        Raises:
+            Exception: the second operand must be a Vector of the same basis
+        Returns:
+            complex: the result of the multiplication
+        """
+        if isinstance(other, Vector) and self.base() == other.base():
+            return (Matrix(self.tolist()) * other.tomatrix()).det()
+        raise Exception
+    
+    def vect_mult(vectors: list):
+        """Vector product, all ortho
+        Args:
+            vectors (list(Vector)): the vectors to multiply
+        Raises:
+            Exception: all vectors must be of the same ortho basis
+        Returns:
+            Vector: product
+        """
+        for vector in list:
+            if ((not isinstance(vector, Vector))
+                or (not vector.is_ortho())
+                or len(vector) != len(vectors[0])):
+                raise Exception
+        coords = []
+        for i in range(len(vectors[0])):
+            coords.append(((-1)**i)*Matrix([vector.__coords[:i] + vector.__coords[i+1:]
+                                            for vector in vectors]
+                                            ).det())
+        return Vector(coords)
     

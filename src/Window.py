@@ -13,24 +13,30 @@ class Window:
         self.__noinit()
         self.solver = Solver()
         self.window = tk.Tk(screenName="LinearSolver",
-                                 baseName="LinSol",
+                                 baseName="LinSol", 
                                  className="LinearSolverV0_1")
+        self.window.grid_columnconfigure(0, minsize=150)
+        self.window.grid_rowconfigure([0, 1, 2, 3, 4], minsize=25)
         self.init_det_b = tk.Button(self.window, text="determinator",
-                                    command=self.init_det,
+                                    command=self.init_det, width=20,
                                     activebackground="green")
-        self.init_det_b.grid(row=0, column=0)
+        self.init_det_b.place_configure(x=0, y=0)
         self.init_ari_b = tk.Button(self.window, text="matrix arithmetics",
-                                    command=self.init_ari,
+                                    command=self.init_ari, width=20,
                                     activebackground="green")
-        self.init_ari_b.grid(row=1, column=0)
+        self.init_ari_b.place_configure(x=0, y=25)
         self.init_linsolve_b = tk.Button(self.window, text="Linear Equations",
-                                        command=self.init_linsolve,
+                                        command=self.init_linsolve, width=20,
                                         activebackground="green")
-        self.init_linsolve_b.grid(row=2, column=0)
+        self.init_linsolve_b.place_configure(x=0, y=50)
         self.init_trans_b = tk.Button(self.window, text="Basis transitions",
-                                        command=self.init_trans,
+                                        command=self.init_trans, width=20,
                                         activebackground="green")
-        self.init_trans_b.grid(row=3, column=0)
+        self.init_trans_b.place_configure(x=0, y=75)
+        self.init_vecari_b = tk.Button(self.window, text="Vector arithmetics",
+                                       command=self.init_vecari, width=20,
+                                       activebackground="green")
+        self.init_vecari_b.place_configure(x=0, y=100)
         self.window.mainloop()
     
     def __noinit(self) -> None:
@@ -40,6 +46,7 @@ class Window:
         self.ari_is_init = False
         self.linsolve_is_init = False
         self.trans_is_init = False
+        self.vecari_is_init = False
     
     def kys(self) -> None:
         """Deinitialises all gui parts, removing them from the window
@@ -48,6 +55,7 @@ class Window:
         self.deinit_ari()
         self.deinit_linsolve()
         self.deinit_trans()
+        self.deinit_vecari()
 
     def write(output: tk.Text, text: str) -> None:
         """Writes the string of text into a Text widjet,
@@ -347,3 +355,76 @@ class Window:
             Window.write(self.text_output, self.solver.transpoints().print())
         except Exception:
             Window.write(self.text_output, "Invalid input")
+    
+    def init_vecari(self):
+        self.kys()
+        self.vecari_is_init = True
+        self.init_vecari_b.configure(fg="green")
+        vecari_explanation = """        Middle inputs:
+        '+' for addition
+        '-' for subtraction
+        '*' or '()' for scalar product
+        '[]' for vector product
+        '/' for vector division (TBA)
+        for vector product of 3+ vectors,
+        please convert them to the same
+        basis and write them as columns
+        under 'Vector 1 (a column)'
+        """
+        self.label1 = tk.Label(self.window, text="Basis of vector 1:")
+        self.label2 = tk.Label(self.window, text="Vector 1 (a column):")
+        self.label3 = tk.Label(self.window, text="Basis of vector 2:")
+        self.label4 = tk.Label(self.window, text="Vector 2 (a column):")
+        self.label5 = tk.Label(self.window, text="Basis of answer:")
+        self.label6 = tk.Label(self.window, text="Answer:")
+        self.label7 = tk.Label(self.window, text=vecari_explanation)
+        self.label1.grid(row=0, column=1)
+        self.label2.grid(row=0, column=2)
+        self.label3.grid(row=0, column=4)
+        self.label4.grid(row=0, column=5)
+        self.label5.grid(row=2, column=1)
+        self.label6.grid(row=2, column=2)
+        self.label7.grid(row=3, column=5)
+        self.text_input1 = tk.Text(self.window, height=10, width=30)
+        self.text_input2 = tk.Text(self.window, height=10, width=30)
+        self.text_input3 = tk.Text(self.window, height=10, width=30)
+        self.text_input4 = tk.Text(self.window, height=10, width=30)
+        self.text_output1 = tk.Text(self.window, height=10, width=30)
+        self.text_output2 = tk.Text(self.window, height=10, width=30)
+        self.text_input1.grid(row=1, column=1)
+        self.text_input2.grid(row=1, column=2)
+        self.text_input3.grid(row=1, column=4)
+        self.text_input4.grid(row=1, column=5)
+        self.text_output1.grid(row=3, column=1)
+        self.text_output2.grid(row=3, column=2)
+        self.ari_input = tk.Entry(self.window, width=3)
+        self.ari_input.grid(row=1, column=3)
+        self.execute_b = tk.Button(self.window, text="Execute",
+                                   command=self.exec_vecari,
+                                   activebackground="green")
+        self.execute_b.grid(row=3, column=4)
+        
+
+    def deinit_vecari(self):
+        if self.vecari_is_init:
+            self.vecari_is_init = False
+            self.init_vecari_b.configure(fg="black")
+            self.label1.destroy()
+            self.label2.destroy()
+            self.label3.destroy()
+            self.label4.destroy()
+            self.label5.destroy()
+            self.label6.destroy()
+            self.label7.destroy()
+            self.text_input1.destroy()
+            self.text_input2.destroy()
+            self.text_input3.destroy()
+            self.text_input4.destroy()
+            self.text_output1.destroy()
+            self.text_output2.destroy()
+            self.ari_input.destroy()
+            self.execute_b.destroy()
+
+    def exec_vecari(self):
+        pass
+

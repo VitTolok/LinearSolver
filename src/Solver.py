@@ -155,4 +155,23 @@ class Solver:
         transmat = tempsolver.linsolve()
         return pointsb[0].tomatrix() + transmat * (self.vectora - pointsa[0]).tomatrix()
 
+    def getscalmult(self):
+        e = Matrix.e(len(self.vectora))
+        tempsolver = Solver(self.vectora.base(), e)
+        transmata = tempsolver.transmat()
+        self.vectora.tobase(e, transmata)
+        tempsolver = Solver(self.vectorb.base(), e)
+        transmatb = tempsolver.transmat()
+        self.vectorb.tobase(e, transmatb)
+        return self.vectora.scal_mult(self.vectorb)
+    
+    def getvectmult(self) -> Vector:
+        base = self.matrixb
+        lst = list(map(Vector, self.matrixa.columns()))
+        for vector in lst:
+            vector = Vector(vector.tolist(), base)
+        product = Vector.vect_mult(lst)
+        tempsolver = Solver(lst[0].base(), base)
+        product.tobase(base, tempsolver.transmat())
+        return product
         

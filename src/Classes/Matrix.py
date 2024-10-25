@@ -1,21 +1,10 @@
-def _is_rectangular(matrix: list) -> bool:
-    """
-    Args:
-        matrix (list): A 2D list, containing all the elements of the matrix
-
-    Returns:
-        bool: whether or not all rows have the same number of elements
-    """
-    length = len(matrix[0])
-    for row in matrix:
-        if len(row) != length:
-            return False
-    return True
-
-
-
 class Matrix:
     """A class for storing and operating Matrixes."""
+
+    def e(size: int):
+        return Matrix([[1 if i == j else 0
+                        for j in range(size)]
+                        for i in range(size)])
 
     def _is_rectangular(matrix: list) -> bool:
         """
@@ -83,11 +72,14 @@ class Matrix:
         Returns:
             Matrix: the constructed Matrix
         """
-        if not _is_rectangular(array_2d):
+        if not Matrix._is_rectangular(array_2d):
             raise Exception
         self._matrix = array_2d.copy()
         self._rows = len(self._matrix)
         self._cols = len(self._matrix[0])
+        for line in self._matrix:
+            for elem in line:
+                elem = complex(elem)
         self._columns = Matrix._transpose(self._matrix)
         self._det = None
         if self._cols == self._rows:
