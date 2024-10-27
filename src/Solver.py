@@ -1,8 +1,55 @@
 from Classes.Matrix import Matrix
 from Classes.Vector import Vector
-import Classes
 
 class Solver:
+    def __init__(self, input_list: list):
+        self._input = input_list.copy()
+    
+    def setinput(self, value, index):
+        self._input[index] = value
+    
+    def getinput(self, index):
+        return self._input[index]
+
+    def get_solution(self):
+        pass
+
+
+class LinSolver(Solver):
+    def _linsolve(self, a: int, b: int) -> Matrix:
+        """An algorithm that provides a matrix X such that AX=B
+        Raises:
+            Exception: Matrix A has to be square
+            Exception: Matrixes A and B have to have the same number of rows
+        Returns:
+            Matrix: matrix X
+        """
+        matrixa = self._input[a]
+        matrixb = self._input[b]
+        if not isinstance(matrixa, Matrix) or not isinstance(matrixb, Matrix):
+            raise Exception
+        if not matrixa.is_square():
+            raise Exception
+        if matrixa.rows() != matrixb.rows():
+            raise Exception
+        if matrixa.det() == complex(0):
+            return None
+        matrixx = Matrix([[complex(0) for j in range(matrixb.cols())]
+                          for i in range(matrixb.rows())])
+        for i in range(matrixx.rows()):
+            for j in range(matrixx.cols()):
+                matrixaij = Matrix(Matrix._transpose(
+                                   matrixa.columns()[:i]
+                                   + [matrixb.columns()[j]]
+                                   + matrixa.columns()[i+1:]))
+                matrixx.set(i, j, matrixaij.det()/matrixa.det())
+        matrixx.det(True)
+        return matrixx
+    
+    def get_solution(self):
+        return self._linsolve(0, 1)
+
+class oldSolver:
     """A class for calculating algorithms"""
 
     def __init__(self, matrix1: Matrix | None = None,
@@ -94,7 +141,7 @@ class Solver:
         e = Matrix([[(1+0j) if i == j else (0j)
                       for j in range(self.matrixb.cols())]
                       for i in range(self.matrixb.cols())])
-        tempsolver = Solver(self.matrixb, e)
+        tempsolver = oldSolver(self.matrixb, e)
         return self.matrixa * tempsolver.linsolve()
     
     def linsolve(self) -> Matrix:
@@ -128,7 +175,7 @@ class Solver:
         Returns:
             Matrix: the transition Matrix
         """
-        tempsolve = Solver(self.matrixb, self.matrixa)
+        tempsolve = oldSolver(self.matrixb, self.matrixa)
         return tempsolve.linsolve()
     
     def transvec(self) -> Matrix:
@@ -150,17 +197,17 @@ class Solver:
         pointsb = list(map(Vector, self.matrixb.columns()))
         vectorsa = [pointsa[i+1] - pointsa[0] for i in range(len(pointsa) - 1)]
         vectorsb = [pointsb[i+1] - pointsb[0] for i in range(len(pointsb) - 1)]
-        tempsolver = Solver(Matrix([vector.tolist() for vector in vectorsa]).transposed(),
+        tempsolver = oldSolver(Matrix([vector.tolist() for vector in vectorsa]).transposed(),
                             Matrix([vector.tolist() for vector in vectorsb]).transposed())
         transmat = tempsolver.linsolve()
         return pointsb[0].tomatrix() + transmat * (self.vectora - pointsa[0]).tomatrix()
 
     def getscalmult(self):
         e = Matrix.e(len(self.vectora))
-        tempsolver = Solver(self.vectora.base(), e)
+        tempsolver = oldSolver(self.vectora.base(), e)
         transmata = tempsolver.transmat()
         self.vectora.tobase(e, transmata)
-        tempsolver = Solver(self.vectorb.base(), e)
+        tempsolver = oldSolver(self.vectorb.base(), e)
         transmatb = tempsolver.transmat()
         self.vectorb.tobase(e, transmatb)
         return self.vectora.scal_mult(self.vectorb)
@@ -171,7 +218,7 @@ class Solver:
         for vector in lst:
             vector = Vector(vector.tolist(), base)
         product = Vector.vect_mult(lst)
-        tempsolver = Solver(lst[0].base(), base)
+        tempsolver = oldSolver(lst[0].base(), base)
         product.tobase(base, tempsolver.transmat())
         return product
         

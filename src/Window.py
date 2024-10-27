@@ -1,5 +1,5 @@
 import tkinter as tk
-from Solver import Solver
+from Solver import oldSolver
 from Classes.Matrix import Matrix
 from Classes.Vector import Vector
 
@@ -11,7 +11,7 @@ class Window:
         """Creates a new window with base GUI and a Solver entity
         """
         self.__noinit()
-        self.solver = Solver()
+        self.solver = oldSolver()
         self.window = tk.Tk(screenName="LinearSolver",
                                  baseName="LinSol", 
                                  className="LinearSolverV0_1")
