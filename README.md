@@ -20,6 +20,7 @@
       - [Dependencies](#dependencies-2)
     - [Matrix.py](#matrixpy)
     - [Vector.py](#vectorpy)
+      - [Dependencies](#dependencies-3)
   - [GUI](#gui)
 
 
@@ -140,6 +141,9 @@ Internal:
 Contains one class, Matrix, resposible for storing Matrixes and conducting simple operations with them.
 ### Vector.py
 Contains one class, Vector, resposible for storing Vectors and conducting simple operations with them.
+#### Dependencies
+Internal
+- Matrix class from Matrix.py
 ## GUI
 The main interface is separated into several categories, i.e. determinator, matrix arithmetics, etc. Each of them is accessed by pressing the corresponding button on the left. All of them require inputs from rhe user via text, the general rules to formatting the input of a matrix are:
 - Separate rows of the matrix must be written on separate lines
@@ -149,4 +153,7 @@ The main interface is separated into several categories, i.e. determinator, matr
 - Integers can be written as follows: 123 -45
 - Floats can be written like this: 1.23 -4.5
 - Complex numbers like this: 1.2-3.4j -5.67+9j
+
 For arithmetics categories put the corresponding operator in the middle, between the operands, be that vectors or matrixes
+
+To get the result, press the 'Execute' button.
