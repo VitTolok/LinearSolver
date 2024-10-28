@@ -20,7 +20,8 @@ class MatrixArithmeticsGUI(SubGUI):
         self.__output_label = tk.Label(self._master, text="Result:")
         self.__output_text = tk.Text(self._master, height=10, width=30)
         self.__execute_b = tk.Button(self._master, text="Execute",
-                                   width=15, command=self._calculate)
+                                     activebackground="green",
+                                     width=15, command=self._calculate)
         self.__first_text_input.insert("1.0", self.__first_input_buffer)
         self.__second_text_input.insert("1.0", self.__second_input_buffer)
         self.__output_text.insert("1.0", self.__output_buffer)
