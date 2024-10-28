@@ -2,9 +2,32 @@ import tkinter as tk
 from Solver.Solver import oldSolver
 from Classes.Matrix import Matrix
 from Classes.Vector import Vector
+from GUI.DeterminatorGUI import DeterminatorGUI
 
 class Window:
-    """A class for operating GUI, including reading, writing,
+    def __init__(self):
+        self.__master = tk.Tk(screenName="LinearSolver",
+                              baseName="LinSol", 
+                              className="LinearSolverV0_1")
+        self.__det_gui_b = tk.Button(self.__master, text="determinator",
+                                     width=20, activebackground="green")
+        self.__master.grid_columnconfigure(0, minsize=150)
+        self.__master.grid_rowconfigure([0, 1, 2, 3, 4], minsize=25)
+        self.__det_gui = DeterminatorGUI(self.__master, self.__det_gui_b)
+        self.__det_gui_b.configure(command=self.__activate_det)
+        self.__det_gui_b.place_configure(x=0, y=0)
+        self.__master.mainloop()
+    
+    def __kys(self):
+        self.__det_gui.collapse()
+    
+    def __activate_det(self):
+        self.__kys()
+        self.__det_gui.activate()
+
+
+class oldWindow:
+    """A deprecated class for operating GUI, including reading, writing,
     conversion of data for further calculation, calling for calculation
     """
     def __init__(self):
@@ -122,7 +145,7 @@ class Window:
         matrix2d2 = Matrix.read(self.text_input2.get("1.0", "end-1c"))
         operation_str = self.ari_input.get()
         if not (operation_str in ['+', '-', '*', '/']):
-            Window.write(self.output_text, "Invalid input")
+            oldWindow.write(self.output_text, "Invalid input")
             return
         try:
             self.solver.change_matrixa(Matrix(matrix2d1))
@@ -139,7 +162,7 @@ class Window:
             self.output_text.delete("1.0", "end-1c")
             self.output_text.insert("1.0", result)
         except Exception:
-            Window.write(self.output_text, "Invalid input")
+            oldWindow.write(self.output_text, "Invalid input")
 
     def init_ari(self):
         """inits the ari part of the GUI
@@ -232,9 +255,9 @@ class Window:
             result = '\n'.join([' '.join([f"{varnames[i][j]} = {solution[i][j]}"
                                           for j in range(len(solution[0]))])
                                           for i in range(len(solution))])
-            Window.write(self.text_output, result)
+            oldWindow.write(self.text_output, result)
         except:
-            Window.write(self.text_output, "Invalid input")
+            oldWindow.write(self.text_output, "Invalid input")
     
     def init_trans(self):
         """inits trans part of the GUI
@@ -335,13 +358,13 @@ class Window:
             self.solver.change_matrixa(basis1)
             self.solver.change_matrixb(basis2)
             if veclst == [] or veclst == ['']:
-                Window.write(self.text_output, self.solver.transmat().print())
+                oldWindow.write(self.text_output, self.solver.transmat().print())
             else:
                 vector = Vector(veclst, basis1)
                 self.solver.change_vectora(vector)
-                Window.write(self.text_output, self.solver.transvec().print())
+                oldWindow.write(self.text_output, self.solver.transvec().print())
         except Exception:
-            Window.write(self.text_output, "Invalid input")
+            oldWindow.write(self.text_output, "Invalid input")
 
     def execuktrans(self):
         """Commences Point coordinate system transition by calling solver
@@ -352,9 +375,9 @@ class Window:
             self.solver.change_vectora(Vector(self.text_input2.get("1.0", "end-1c").split()))
             self.solver.change_matrixb(Matrix(Matrix.read(
                                        self.text_input3.get("1.0", "end-1c"))))
-            Window.write(self.text_output, self.solver.transpoints().print())
+            oldWindow.write(self.text_output, self.solver.transpoints().print())
         except Exception:
-            Window.write(self.text_output, "Invalid input")
+            oldWindow.write(self.text_output, "Invalid input")
     
     def init_vecari(self):
         self.kys()
