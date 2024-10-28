@@ -49,6 +49,70 @@ class LinSolver(Solver):
     def get_solution(self):
         return self._linsolve(0, 1)
 
+class MatDivSolver(LinSolver):
+    def _matdiv(self, a: int, b: int) -> Matrix:
+        """Matrix division by inverted matrix multiplication
+        Raises:
+            Exception: the divisor must be square
+        Returns:
+            Matrix: the result of the division
+        """
+        matrixa = self._input[a]
+        matrixb = self._input[b]
+        if not isinstance(matrixa, Matrix) or not isinstance(matrixb, Matrix):
+            raise Exception
+        if not matrixb.is_square():
+            raise Exception
+        self._input.append(Matrix.e(matrixb.cols()))
+        invmatb = self._linsolve(b, -1)
+        self._input.pop()
+        return matrixa * invmatb
+    
+    def get_solution(self):
+        return self._matdiv(0, 1)
+
+class TransBasisSolver(LinSolver):
+    def __init__(self, input_list: list | None = None):
+        super().__init__(input_list)
+        self._transmat = self.transmat(0, 1)
+        self._revmat = self.transmat(1, 0)
+    
+    def transmat(self, initindex: int, targetindex: int):
+        """Calculates the transition Matrix from basis A to basis B
+        Returns:
+            Matrix: the transition Matrix
+        """
+        return self._linsolve(targetindex, initindex)
+    
+    def transvec(self, vector: Vector | Matrix):
+        if isinstance(vector, Vector):
+            return Vector((self._transmat * vector.tomatrix()).columns()[0])
+        return self._transmat * vector
+    
+    def revertvec(self, vector: Vector):
+        if isinstance(vector, Vector):
+            return Vector((self._revmat * vector.tomatrix()).columns()[0])
+        return self._revmat * vector
+    
+    def get_solution(self):
+        return self._transmat
+
+class TransCoordSolver(TransBasisSolver):
+    def __init__(self, input_list):
+        super(super()).__init__(input_list)
+        self._keypointa = Vector(input_list[1].columns()[0])
+        self._keypointb = Vector(input_list[3].columns()[0])
+        self._input.append(Matrix(self._input[0].columns()[1:]).transposed())
+        self._input.append(Matrix(self._input[2].columns()[1:]).transposed())
+        self._transmat = self.transmat(-1, -2)
+        self._revmat = self.transmat(-2, -1)
+
+    def transpoint(self, vector: Vector | Matrix):
+        if isinstance(vector, Vector):
+            return self._keypointb.tomatrix() + self._transmat*(vector.tomatrix()
+                                                                -self._keypointa)
+        
+
 class oldSolver:
     """A class for calculating algorithms"""
 

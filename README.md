@@ -145,7 +145,7 @@ Contains one class, Vector, resposible for storing Vectors and conducting simple
 Internal
 - Matrix class from Matrix.py
 ## GUI
-The main interface is separated into several categories, i.e. determinator, matrix arithmetics, etc. Each of them is accessed by pressing the corresponding button on the left. All of them require inputs from rhe user via text, the general rules to formatting the input of a matrix are:
+The main interface is separated into several categories, i.e. determinator, matrix arithmetics, etc. Each of them is accessed by pressing the corresponding button on the left. All of them require inputs from the user via text, the general rules to formatting the input of a matrix are:
 - Separate rows of the matrix must be written on separate lines
 - All elements of the same row must be on the same line
 - Between two elements of the same row there must be at least one space (' ')

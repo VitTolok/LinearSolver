@@ -1,5 +1,5 @@
 import tkinter as tk
-from Solver import oldSolver
+from Solver.Solver import oldSolver
 from Classes.Matrix import Matrix
 from Classes.Vector import Vector
 

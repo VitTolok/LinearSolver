@@ -1,2 +1,5 @@
 LinearSolver.code-workspace
 .vscode
+src/GUI/__pycache__
+src/Solver/__pycache__
+src/Classes/__pycache__
