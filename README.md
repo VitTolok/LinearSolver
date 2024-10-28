@@ -120,7 +120,7 @@ A class that creates, stores and applies a basis transition matrix for vectors. 
 #### class TransCoordSolver
 Calculates and stores key points and a transition Matrix between two general Cartesian coordinate systems, given their common points. Child of [TransBasisSolver](#class-transbasissolver)
 
-- ***\_\_init__(input_list)*** - the modified constructor. Additionally calculates and writes down the transition matrix and one key poin for each system, assuming the common points are stored as two matrixes under indexes 0 and 1
+- ***\_\_init__(input_list)*** - the modified constructor. Additionally calculates and writes down the transition matrix and one key point for each system, assuming the common points are stored as two matrixes under indexes 0 and 1
 - **.transpoint(point)** - for a point Vector (or a batch stored as columns in a Matrix) in initial coordinate system, returns it in the target coordinate system
 - **.revertpoint(point)** - for a point Vector (or a batch stored as columns in a Matrix) in target coordinate system, returns it in the initial coordinate system
 - **.get_solution()** - returns the transition matrix

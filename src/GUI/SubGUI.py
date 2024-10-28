@@ -12,10 +12,15 @@ class SubGUI:
 
     def collapse(self) -> bool:
         if self._is_init:
+            self._is_init = False
             self._button.configure(fg="black")
             return True
         return False
 
-    def calculate(self):
+    def _calculate(self):
         pass
+
+    def _write(output: tk.Text, text: str) -> None:
+        output.delete("1.0", "end-1c")
+        output.insert("1.0", text)
 
