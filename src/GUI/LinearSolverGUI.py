@@ -57,7 +57,7 @@ class LinearSolverGUI(SubGUI):
     def _calculate(self):
         try:
             matrix_a = Matrix(Matrix.read(self.__matrix_a_input.get("1.0", "end-1c")))
-            var_names_str = self.__var_names_input.get("1.0", "end-1c")
+            var_names_str = self.__var_names_input.get("1.0", "end-1c").strip()
             if var_names_str != "":
                 var_names = Matrix.read(self.__var_names_input.get("1.0", "end-1c"), False)
             matrix_b = Matrix(Matrix.read(self.__matrix_b_input.get("1.0", "end-1c")))
