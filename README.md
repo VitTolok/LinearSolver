@@ -28,7 +28,7 @@
 
 This project is a simple program built with the purpose of assisting the user in Calcultion, related to matrixes, such as: determinator calculation, matrix arithmetics, system of linear equations solution, basis and coodinate system transition and more (possibly in the future)
 
-It was made entirely by me, @VitTolok.
+It was made entirely by me, @VitTolok. Yes, believe me or not, not a single line of this project was written by anything but me, not even GPT had a hand in this.
 
 ## LinearSolver's Dependencies
 
