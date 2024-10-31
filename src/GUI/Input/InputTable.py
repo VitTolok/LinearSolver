@@ -20,7 +20,7 @@ class InputTable:
                 self.__inputs.append(list())
                 for j in range(self.__columns):
                     textvar = tk.StringVar(self.__submaster, value=self.__paste[i][j] 
-                               if i < len(self.__paste) and j < len(self.__paste[0])
+                               if i < len(self.__paste) and j < len(self.__paste[i])
                                else "")
                     self.__inputs[i].append(tk.Entry(self.__submaster, width=5,
                                                      textvariable=textvar))     

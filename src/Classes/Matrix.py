@@ -19,7 +19,7 @@ class Matrix:
                 return False
         return True
     
-    def read(string: str, comp: bool = True) -> list:
+    def read(string: str, comp: bool = True) -> list[list[complex]] | list[list[str]]:
         """a method for reading matrixes from strings
         Args:
             string (str): matrix in string

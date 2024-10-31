@@ -14,7 +14,7 @@ class MatrixArithmeticsGUI(SubGUI):
     def activate(self):
         super().activate()
         self.__operator_label = tk.Label(self._master,
-                                         text="Enter +, - or * below (or even /)")
+                                         text="Enter +, - or * below\n(or even /)")
         self.__operator_input = tk.Entry(self._master, width=5)
         self.__alt_input_b = tk.Button(self._master, text="Alt Input",
                                        activebackground="green", width=15)
