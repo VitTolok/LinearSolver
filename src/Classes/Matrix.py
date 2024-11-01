@@ -303,5 +303,8 @@ class Matrix:
             return self * (1 / other)
         else:
             raise Exception
+    
+    def __len__(self):
+        return self._rows
 
         

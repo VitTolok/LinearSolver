@@ -144,7 +144,7 @@ class Vector:
         Returns:
             Vector: product
         """
-        for vector in list:
+        for vector in vectors:
             if ((not isinstance(vector, Vector))
                 or (not vector.is_ortho())
                 or len(vector) != len(vectors[0])):
