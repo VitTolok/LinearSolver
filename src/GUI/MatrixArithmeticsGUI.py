@@ -47,8 +47,8 @@ class MatrixArithmeticsGUI(SubGUI):
             self.__alt_input_b.destroy()
     
     def _calculate(self):
-        matrixa = Matrix(Matrix.read(self.__input.read(0)))
-        matrixb = Matrix(Matrix.read(self.__input.read(1)))
+        matrixa = Matrix(Matrix.read(self.__input.read(0)), True)
+        matrixb = Matrix(Matrix.read(self.__input.read(1)), True)
         operation_str = self.__operator_input.get()
         if not (operation_str in ['+', '-', '*', '/']):
             SubGUI._write(self.__output_text, "Invalid input")
@@ -66,6 +66,7 @@ class MatrixArithmeticsGUI(SubGUI):
                 else:
                     matrix_result = matrixa * matrixb
             else:
+                matrixb.det(True)
                 solver = MatrixDivisionSolver([matrixa, matrixb])
                 matrix_result = solver.get_solution()
             SubGUI._write(self.__output_text, matrix_result.print())

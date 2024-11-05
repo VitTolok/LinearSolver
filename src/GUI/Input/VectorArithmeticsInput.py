@@ -25,12 +25,12 @@ class VectorArithmeticsInput(InputField):
     
     def _activate_alt(self, buffers):
         super()._activate_alt(buffers)
-        dims = max(2, len(Matrix.read(buffers[0])),
-                   len(Matrix.read(buffers[1])),
-                   len(Matrix.read(buffers[2])),
-                   len(Matrix.read(buffers[3])))
-        vecs1 = max(1, len(Matrix.read(buffers[1])[0]))
-        vecs2 = max(1, len(Matrix.read(buffers[3])[0]))
+        dims = max(2, len(Matrix.read(buffers[0], False)),
+                   len(Matrix.read(buffers[1], False)),
+                   len(Matrix.read(buffers[2], False)),
+                   len(Matrix.read(buffers[3], False)))
+        vecs1 = max(1, len(Matrix.read(buffers[1], False)[0]))
+        vecs2 = max(1, len(Matrix.read(buffers[3], False)[0]))
         self.__dims = tk.IntVar(self._master, value=dims)
         self.__vecs1 = tk.IntVar(self._master, value=vecs1)
         self.__vecs2 = tk.IntVar(self._master, value=vecs2)

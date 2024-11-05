@@ -12,7 +12,7 @@ class DeterminatorInput(InputField):
     
     def _activate_alt(self, buffers: list):
         super()._activate_alt(buffers)
-        size = max(3, len(Matrix.read(buffers[0])))
+        size = max(3, len(Matrix.read(buffers[0], False)))
         self.__size = tk.IntVar(self._master, value=size)
         self.__size_scale = tk.Scale(self._master, variable=self.__size,
                                      from_=1, to=10, orient='horizontal')

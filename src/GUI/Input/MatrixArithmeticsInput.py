@@ -19,10 +19,10 @@ class MatrixArithmeticsInput(InputField):
     
     def _activate_alt(self, buffers):
         super()._activate_alt(buffers)
-        rows1 = max(3, len(Matrix.read(buffers[0])))
-        rows2 = max(3, len(Matrix.read(buffers[1])))
-        cols1 = max(3, len(Matrix.read(buffers[0])[0]))
-        cols2 = max(3, len(Matrix.read(buffers[1])[0]))
+        rows1 = max(3, len(Matrix.read(buffers[0], False)))
+        rows2 = max(3, len(Matrix.read(buffers[1], False)))
+        cols1 = max(3, len(Matrix.read(buffers[0], False)[0]))
+        cols2 = max(3, len(Matrix.read(buffers[1], False)[0]))
         self.__rows1 = tk.IntVar(self._master, value=rows1)
         self.__rows2 = tk.IntVar(self._master, value=rows2)
         self.__cols1 = tk.IntVar(self._master, value=cols1)

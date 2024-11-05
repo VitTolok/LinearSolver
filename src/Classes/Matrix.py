@@ -1,3 +1,5 @@
+from math import *
+
 class Matrix:
     """A class for storing and operating Matrixes."""
 
@@ -19,7 +21,7 @@ class Matrix:
                 return False
         return True
     
-    def read(string: str, comp: bool = True) -> list[list[complex]] | list[list[str]]:
+    def read(string: str, evaluate: bool = True) -> list[list[complex]] | list[list[str]]:
         """a method for reading matrixes from strings
         Args:
             string (str): matrix in string
@@ -32,8 +34,12 @@ class Matrix:
         while "\n\n" in string:
             string = string.replace("\n\n", '\n')
         lst = string.split('\n')
-        if comp:
-            matrix_2d = [list(map(complex, line.split())) for line in lst]
+        if evaluate:
+            j = 1j
+            matrix_str = [line.split() for line in lst]
+            matrix_2d = [[complex(eval(matrix_str[a-1][b-1]))
+                          for b in range(1, len(matrix_str[a-1]) + 1)]
+                          for a in range(1, len(matrix_str) + 1)]
         else:
             matrix_2d = [list(line.split()) for line in lst]
         return matrix_2d
@@ -63,7 +69,7 @@ class Matrix:
                 for i in range(len(matrix)))
 
 
-    def __init__(self, array_2d: list):
+    def __init__(self, array_2d: list, skip_det = False):
         """Constructs a Matrix from its 2D list representation
         Args:
             array_2d (list): 2D list representation of the matrix
@@ -82,7 +88,7 @@ class Matrix:
                 elem = complex(elem)
         self._columns = Matrix._transpose(self._matrix)
         self._det = None
-        if self._cols == self._rows:
+        if self._cols == self._rows and not skip_det:
             self._det = Matrix.__det(array_2d)
 
     def tolist(self) -> list:

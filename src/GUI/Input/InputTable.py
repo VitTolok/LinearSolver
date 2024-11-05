@@ -12,13 +12,14 @@ class InputTable:
     
     def activate(self, row: int, column: int):
         self.__is_init = True
-        self.__submaster = tk.Frame(self.__master, borderwidth=10)
+        self.__submaster = tk.Frame(self.__master, borderwidth=1)
         self.__submaster.grid(row=row, column=column)
         self.__inputs = []
         for i in range(self.__rows):
             tk.Label(self.__submaster, text=str(i+1)).grid(row=i+1, column=0)
         for j in range(self.__columns):
             tk.Label(self.__submaster, text=str(j+1)).grid(row=0, column=j+1)
+        good_width = max(3, round(30/self.__columns))
         if not self.__paste is None:
             for i in range(self.__rows):
                 self.__inputs.append(list())
@@ -26,14 +27,14 @@ class InputTable:
                     textvar = tk.StringVar(self.__submaster, value=self.__paste[i][j] 
                                if i < len(self.__paste) and j < len(self.__paste[i])
                                else "")
-                    self.__inputs[i].append(tk.Entry(self.__submaster, width=5,
+                    self.__inputs[i].append(tk.Entry(self.__submaster, width=good_width,
                                                      textvariable=textvar))     
                     self.__inputs[i][j].grid(row=i+1, column=j+1)
         else:
             for i in range(self.__rows):
                 self.__inputs.append([])
                 for j in range(self.__columns):
-                    self.__inputs[i].append(tk.Entry(self.__submaster, width=5))
+                    self.__inputs[i].append(tk.Entry(self.__submaster, width=good_width))
                     self.__inputs[i][j].grid(row=i+1, column=j+1)
     
     def read(self):

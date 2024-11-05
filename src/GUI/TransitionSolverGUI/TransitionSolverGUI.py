@@ -22,6 +22,7 @@ class TransitionSolverGUI(SubGUI):
         self._master.columnconfigure(1, minsize=150)
         self.__basis_gui_b.grid(row=0, column=1)
         self.__coord_gui_b.place_configure(x=150, y=25)
+        self._master.grid_rowconfigure([0, 1, 2, 3, 4, 5], minsize=25)
     
     def collapse(self):
         if super().collapse():
