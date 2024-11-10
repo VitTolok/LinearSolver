@@ -3,7 +3,26 @@ from Classes.Matrix import Matrix
 from Classes.Vector import Vector
 
 class VectorArithmeticsSolver(BasisTransitionSolver):
+    """A Solver for Vector Arithmetics Algorithms
+    Args:
+        BasisTransitionSolver (Solver): for changing basises
+    """
     def __init__(self, input_list: list[Matrix | Vector] = None):
+        """Writes inputs and calculates transition matrixes
+        if a basis is not given it is replaced by an eye matrix
+        of the appropriate size
+        Args:
+            input_list (list[Matrix  |  Vector], optional): the list of inputs.
+            The first element is the basis of the first batch.
+            The second element is the first batch of vectors.
+            The third is the basis of the second batch.
+            The fourth is the second batch.
+            Defaults to None.
+        Raises:
+            Exception: No Inputs
+        """
+        if input_list == None:
+            raise Exception
         if input_list[0] is None and input_list[2] is None:
             if not input_list[1] is None:
                 input_list[0] = Matrix.e(len(input_list[1]))
@@ -26,8 +45,16 @@ class VectorArithmeticsSolver(BasisTransitionSolver):
         self.__batch_1 = input_list[1]
         self.__basis_2 = input_list[2]
         self.__batch_2 = input_list[3]
+        self.__basis_1.det(True)
+        self.__basis_2.det(True)
     
     def add(self, basis: 0 | 1 | 2) -> Matrix:
+        """Calculates the vector sum
+        Args:
+            basis (0 | 1 | 2): which basis to covert the answer to.
+        Returns:
+            Matrix: the resulting batch
+        """
         if isinstance(self.__batch_1, Vector):
             self.__batch_1 = self.__batch_1.tomatrix()
         if isinstance(self.__batch_2, Vector):
@@ -42,6 +69,12 @@ class VectorArithmeticsSolver(BasisTransitionSolver):
         return self.__batch_1 + self.__batch_2
     
     def sub(self, basis: 0 | 1 | 2) -> Matrix:
+        """calculates vector subtraction
+        Args:
+            basis (0 | 1 | 2): which basis to covert the answer to.
+        Returns:
+            Matrix: the resultin batch of vectors
+        """
         if isinstance(self.__batch_1, Vector):
             self.__batch_1 = self.__batch_1.tomatrix()
         if isinstance(self.__batch_2, Vector):
@@ -56,6 +89,12 @@ class VectorArithmeticsSolver(BasisTransitionSolver):
         return self.__batch_1 - self.__batch_2
     
     def scalmult(self) -> complex:
+        """calculates the scalar product of two vectors
+        Raises:
+            Exception: there have to be exactly 2 vectors in the batches
+        Returns:
+            complex: the scalar product
+        """
         if self.__batch_1 is None and self.__batch_2 is None:
             raise Exception
         elif self.__batch_1 is None:
@@ -72,6 +111,12 @@ class VectorArithmeticsSolver(BasisTransitionSolver):
         raise Exception
     
     def mixmult(self) -> complex:
+        """calculates the mixed product of N N-dimensional vectors
+        Raises:
+            Exception: not enough or too many vectors given
+        Returns:
+            complex: the mixed product
+        """
         if self.__batch_1 is None and self.__batch_2 is None:
             raise Exception
         elif self.__batch_1 is None:
@@ -86,6 +131,12 @@ class VectorArithmeticsSolver(BasisTransitionSolver):
         raise Exception
     
     def vectormult(self) -> Vector:
+        """calculates the vector product of N-1 N-dimensional vectors
+        Raises:
+            Exception: not enough or too many vectors
+        Returns:
+            Vector: the vector product in eye basis
+        """
         if self.__batch_1 is None and self.__batch_2 is None:
             raise Exception
         elif self.__batch_1 is None:

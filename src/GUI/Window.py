@@ -1,13 +1,16 @@
 import tkinter as tk
-from GUI.DeterminatorGUI import DeterminatorGUI
-from GUI.MatrixArithmeticsGUI import MatrixArithmeticsGUI
-from GUI.LinearSolverGUI import LinearSolverGUI
-from GUI.TransitionSolverGUI.TransitionSolverGUI import TransitionSolverGUI
-from GUI.VectorArithmeticsGUI import VectorArithmeticsGUI
-from GUI.MatrixGeneratorGUI import MatrixGeneratorGUI
+from GUI.SubGUI.DeterminatorGUI import DeterminatorGUI
+from GUI.SubGUI.MatrixArithmeticsGUI import MatrixArithmeticsGUI
+from GUI.SubGUI.LinearSolverGUI import LinearSolverGUI
+from GUI.SubGUI.TransitionSolverGUI.TransitionSolverGUI import TransitionSolverGUI
+from GUI.SubGUI.VectorArithmeticsGUI import VectorArithmeticsGUI
+from GUI.SubGUI.MatrixGeneratorGUI import MatrixGeneratorGUI
 
 class Window:
+    """a class that defines the main window object and allows the user
+    to activate parts of the gui"""
     def __init__(self):
+        """creates all the main buttons and SubGUI objects"""
         self.__master = tk.Tk(screenName="LinearSolver",
                               baseName="LinSol", 
                               className="LinearSolverV0_2")
@@ -46,6 +49,7 @@ class Window:
         self.__master.mainloop()
     
     def __kys(self):
+        """collapses all SubGUI parts, resetting the window"""
         self.__det_gui_b.place_configure(x=0, y=0)
         self.__master.grid_rowconfigure([0, 1, 2, 3, 4, 5], minsize=0)
         self.__det_gui.collapse()
@@ -56,25 +60,31 @@ class Window:
         self.__matgen_gui.collapse()
     
     def __activate_det(self):
+        """activates the determinator GUI"""
         self.__kys()
         self.__det_gui.activate()
     
     def __activate_matari(self):
+        """activates the matrix arithmetics GUI"""
         self.__kys()
         self.__matari_gui.activate()
     
     def __activate_linsol(self):
+        """activates the linear equations GUI"""
         self.__kys()
         self.__linsol_gui.activate()
     
     def __activate_trans(self):
+        """activates the system transition GUI"""
         self.__kys()
         self.__trans_gui.activate()
     
     def __activate_vecari(self):
+        """activates the vector arithmetics GUI"""
         self.__kys()
         self.__vecari_gui.activate()
     
     def __activate_matgen(self):
+        """activates the Matrix Generator GUI"""
         self.__kys()
         self.__matgen_gui.activate()

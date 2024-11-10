@@ -1,9 +1,10 @@
 import tkinter as tk
-from GUI.SubGUI import SubGUI
-from GUI.TransitionSolverGUI.BasisTransitionGUI import BasisTransitionGUI
-from GUI.TransitionSolverGUI.CoordinateTransitionGUI import CoordinateTransitionGUI
+from GUI.SubGUI.SubGUI import SubGUI
+from GUI.SubGUI.TransitionSolverGUI.BasisTransitionGUI import BasisTransitionGUI
+from GUI.SubGUI.TransitionSolverGUI.CoordinateTransitionGUI import CoordinateTransitionGUI
 
 class TransitionSolverGUI(SubGUI):
+    """A class handling the System Transitions part of the GUI"""
     def __init__(self, master, button):
         super().__init__(master, button)
         self.__basis_gui = BasisTransitionGUI(self._master, None)

@@ -1,9 +1,10 @@
 import tkinter as tk
-from GUI.SubGUI import SubGUI
+from GUI.SubGUI.SubGUI import SubGUI
 from GUI.Input.DeterminatorInput import DeterminatorInput
 from Classes.Matrix import Matrix
 
 class DeterminatorGUI(SubGUI):
+    """a class handling the Determinator part of the GUI"""
     def __init__(self, master: tk.Tk, button: tk.Button):
         super().__init__(master, button)
         self.__input_buffer = ""
@@ -44,6 +45,9 @@ class DeterminatorGUI(SubGUI):
             self.__answer_buffer = f"det = {detmatrix.print()}"
         except Exception:
             self.__answer_message.configure(text="Invalid Input")
+        if Matrix.sizeof_detcache() > 1_073_741_824: #1GB
+            Matrix.clear_detcache()
+
 
     
 

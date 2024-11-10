@@ -4,6 +4,7 @@ from GUI.Input.InputTable import InputTable
 from Classes.Matrix import Matrix
 
 class CoordinateTransitionInput(InputField):
+    """Handles input for Coordinate transition part of the GUI"""
     def __init__(self, master, switch_button):
         super().__init__(master, switch_button)
         self._fields = 3
@@ -58,6 +59,7 @@ class CoordinateTransitionInput(InputField):
         return self.__system_2_input.read()
     
     def __resize(self):
+        """triggers size change of the table"""
         rows = self.__rows.get()
         cols = self.__cols.get()
         basis_1_buffer = self.__system_1_input.read()
@@ -74,12 +76,14 @@ class CoordinateTransitionInput(InputField):
         self.__system_2_input.activate(2, 5)
     
     def _collapse_text(self):
+        """collapses text input"""
         if super()._collapse_text():
             self.__system_1_text.destroy()
             self.__batch_text.destroy()
             self.__system_2_text.destroy()
     
     def _collapse_alt(self):
+        """collapses table input"""
         if super()._collapse_alt():
             self.__rows_scale.destroy()
             self.__cols_scale.destroy()

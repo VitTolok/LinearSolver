@@ -4,6 +4,7 @@ from GUI.Input.InputTable import InputTable
 from Classes.Matrix import Matrix
 
 class LinearSolverInput(InputField):
+    """Handles inputs for linear equation part of the GUI"""
     def __init__(self, master, switch_button):
         super().__init__(master, switch_button)
         self._fields = 3
@@ -58,6 +59,7 @@ class LinearSolverInput(InputField):
         return self.__matrix_b_input.read()
     
     def __resize(self):
+        """triggers size change of the table"""
         rows = self.__rows.get()
         cols = self.__cols.get()
         matrix_a_buffer = self.__matrix_a_input.read()
@@ -74,12 +76,14 @@ class LinearSolverInput(InputField):
         self.__matrix_b_input.activate(1, 3)
 
     def _collapse_text(self):
+        """collapses text input"""
         if super()._collapse_text():
             self.__matrix_a_text.destroy()
             self.__var_names_text.destroy()
             self.__matrix_b_text.destroy()
     
     def _collapse_alt(self):
+        """collapses table input"""
         if super()._collapse_alt():
             self.__rows_scale.destroy()
             self.__cols_scale.destroy()

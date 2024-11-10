@@ -4,6 +4,7 @@ from GUI.Input.InputTable import InputTable
 from Classes.Matrix import Matrix
 
 class BasisTransitionInput(InputField):
+    """Handles inputs for basis transition"""
     def __init__(self, master, switch_button):
         super().__init__(master, switch_button)
         self._fields = 3
@@ -58,6 +59,7 @@ class BasisTransitionInput(InputField):
         return self.__basis_2_input.read()
     
     def __resize(self):
+        """triggers size change of the table"""
         rows = self.__rows.get()
         cols = self.__cols.get()
         basis_1_buffer = self.__basis_1_input.read()
@@ -74,12 +76,14 @@ class BasisTransitionInput(InputField):
         self.__basis_2_input.activate(2, 5)
     
     def _collapse_text(self):
+        """collapses text input"""
         if super()._collapse_text():
             self.__basis_1_text.destroy()
             self.__batch_text.destroy()
             self.__basis_2_text.destroy()
     
     def _collapse_alt(self):
+        """collapses table input"""
         if super()._collapse_alt():
             self.__rows_scale.destroy()
             self.__cols_scale.destroy()

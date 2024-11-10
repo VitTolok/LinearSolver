@@ -1,10 +1,11 @@
 import tkinter as tk
-from GUI.SubGUI import SubGUI
+from GUI.SubGUI.SubGUI import SubGUI
 from GUI.Input.MatrixArithmeticsInput import MatrixArithmeticsInput
 from Classes.Matrix import Matrix
 from Solver.MatrixDivisionSolver import MatrixDivisionSolver
 
 class MatrixArithmeticsGUI(SubGUI):
+    """a class handling the Matrix Arithmetics part of the GUI"""
     def __init__(self, master: tk.Tk, button: tk.Button):
         super().__init__(master, button)
         self.__first_input_buffer = ""

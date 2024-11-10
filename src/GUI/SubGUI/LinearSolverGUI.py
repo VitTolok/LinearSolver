@@ -1,10 +1,11 @@
 import tkinter as tk
 from Classes.Matrix import Matrix
-from GUI.SubGUI import SubGUI
+from GUI.SubGUI.SubGUI import SubGUI
 from GUI.Input.LinearSolverInput import LinearSolverInput
 from Solver.LinearSolver import LinearSolver
 
 class LinearSolverGUI(SubGUI):
+    """a class handling the Linear Equations part of the GUI"""
     def __init__(self, master: tk.Tk, button: tk.Button):
         super().__init__(master, button)
         self.__matrix_a_buffer = ""
@@ -64,6 +65,6 @@ class LinearSolverGUI(SubGUI):
                                           for i in range(len(solution))])
                 SubGUI._write(self.__output_text, result)
             else:
-                SubGUI._write(self.__output_text, solution.print())
+                SubGUI._write(self.__output_text, solution.print() if not solution is None else "None or infinite solutions")
         except Exception:
             SubGUI._write(self.__output_text, "Invalid input")

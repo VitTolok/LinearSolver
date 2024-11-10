@@ -1,5 +1,5 @@
 import tkinter as tk
-from GUI.SubGUI import SubGUI
+from GUI.SubGUI.SubGUI import SubGUI
 from GUI.Input.VectorArithmeticsInput import VectorArithmeticsInput
 from Solver.VectorArithmeticsSolver import VectorArithmeticsSolver
 from Classes.Matrix import Matrix

@@ -4,6 +4,7 @@ from GUI.Input.InputTable import InputTable
 from Classes.Matrix import Matrix
 
 class MatrixArithmeticsInput(InputField):
+    """Handles inputs for matrix arithmetics"""
     def __init__(self, master, switch_button):
         super().__init__(master, switch_button)
         self._fields = 2
@@ -59,6 +60,7 @@ class MatrixArithmeticsInput(InputField):
         return self.__input_2.read()
     
     def __resize(self):
+        """triggers size change of the table"""
         rows1 = self.__rows1.get()
         cols1 = self.__cols1.get()
         rows2 = self.__rows2.get()
@@ -73,11 +75,13 @@ class MatrixArithmeticsInput(InputField):
         self.__input_2.activate(1, 4)
     
     def _collapse_text(self):
+        """collapses text input"""
         if super()._collapse_text():
             self.__text_input_1.destroy()
             self.__text_input_2.destroy()
     
     def _collapse_alt(self):
+        """collapses table input"""
         if super()._collapse_alt():
             self.__rows1_scale.destroy()
             self.__rows2_scale.destroy()

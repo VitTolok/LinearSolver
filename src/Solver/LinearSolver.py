@@ -18,7 +18,7 @@ class LinearSolver(Solver):
             raise Exception
         if matrixa.rows() != matrixb.rows():
             raise Exception
-        if matrixa.det() == complex(0):
+        if matrixa.det(True) == complex(0):
             return None
         matrixx = Matrix([[complex(0) for j in range(matrixb.cols())]
                           for i in range(matrixb.rows())])

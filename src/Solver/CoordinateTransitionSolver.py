@@ -3,7 +3,15 @@ from Classes.Vector import Vector
 from Classes.Matrix import Matrix
 
 class CoordinateTransitionSolver(BasisTransitionSolver):
-    def __init__(self, input_list):
+    """A class for transition between coordinate systems with known common points
+    Args:
+        BasisTransitionSolver (Solver): for coordinate transition
+    """
+    def __init__(self, input_list: list[Matrix | Vector]):
+        """calculates key points and transition matrixes
+        Args:
+            input_list (_type_): _description_
+        """
         self._keypointa = Vector(input_list[0].columns()[0])
         self._keypointb = Vector(input_list[1].columns()[0])
         input_x = []
@@ -15,8 +23,7 @@ class CoordinateTransitionSolver(BasisTransitionSolver):
 
     def transpoint(self, vector: Vector | Matrix):
         if isinstance(vector, Vector):
-            return self._keypointb.tomatrix() + self._transmat*(vector.tomatrix()
-                                                                -self._keypointa)
+            return self._keypointb.tomatrix() + self._transmat*(vector.tomatrix() - self._keypointa)
         key_point_matrix_a = Matrix([self._keypointa.tolist()]*vector.cols()).transposed()
         key_point_matrix_b = Matrix([self._keypointb.tolist()]*vector.cols()).transposed()
         return self._transmat*(vector-key_point_matrix_a)+key_point_matrix_b

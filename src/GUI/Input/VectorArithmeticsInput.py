@@ -4,6 +4,7 @@ from GUI.Input.InputTable import InputTable
 from Classes.Matrix import Matrix
 
 class VectorArithmeticsInput(InputField):
+    """Handles inputs for vector arithmetics"""
     def __init__(self, master, switch_button):
         super().__init__(master, switch_button)
         self._fields = 4
@@ -75,6 +76,7 @@ class VectorArithmeticsInput(InputField):
         return self.__batch_2_input.read()
     
     def __resize(self):
+        """triggers size change of the table"""
         dims = self.__dims.get()
         vecs1 = self.__vecs1.get()
         vecs2 = self.__vecs2.get()
@@ -96,6 +98,7 @@ class VectorArithmeticsInput(InputField):
         self.__batch_2_input.activate(2, 6)
     
     def _collapse_text(self):
+        """collapses text inputs"""
         if super()._collapse_text():
             self.__basis_1_text.destroy()
             self.__batch_1_text.destroy()
@@ -103,6 +106,7 @@ class VectorArithmeticsInput(InputField):
             self.__batch_2_text.destroy()
     
     def _collapse_alt(self):
+        """collapses table inputs"""
         if super()._collapse_alt():
             self.__dims_scale.destroy()
             self.__vecs1_scale.destroy()

@@ -1,8 +1,9 @@
 import tkinter as tk
-from GUI.SubGUI import SubGUI
+from GUI.SubGUI.SubGUI import SubGUI
 from Classes.Matrix import Matrix
 
 class MatrixGeneratorGUI(SubGUI):
+    """a class handling the Matrix Generator part of the GUI"""
     __guide_text = """First line must specify the type of matrix to generate:
     '5E4' means a 4*4 E matrix multplied  by 5'
     '5A4*4' means a 4*4 matrix of all 5's

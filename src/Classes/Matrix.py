@@ -3,10 +3,20 @@ from math import *
 class Matrix:
     """A class for storing and operating Matrixes."""
 
+    __detcache = dict()
+
+    def clear_detcache():
+        """clears the determinator calculation cache"""
+        Matrix.__detcache = dict()
+    
+    def sizeof_detcache():
+        """returns the size of determinator calculation cache"""
+        return Matrix.__detcache.__sizeof__()
+
     def e(size: int):
         return Matrix([[1 if i == j else 0
                         for j in range(size)]
-                        for i in range(size)])
+                        for i in range(size)], True)
 
     def _is_rectangular(matrix: list) -> bool:
         """
@@ -25,7 +35,7 @@ class Matrix:
         """a method for reading matrixes from strings
         Args:
             string (str): matrix in string
-            comp (bool, optional): whether to make everything complex.
+            evaluate (bool, optional): whether to evaluate expressions.
                 Defaults to True.
         Returns:
             list: matrix in list
@@ -57,16 +67,23 @@ class Matrix:
 
     def __det(matrix: list) -> complex:
         """Calculates the determinator of the given matrix recursively
+        caches its answers to reduce calculation time at the cost of lots?
+        of memory
         Args:
             matrix (list): 2D list representation of a square matrix
         Returns:
             complex: its determinator
         """
+        matrix = tuple(tuple(line) for line in matrix)
+        if matrix in Matrix.__detcache.keys():
+            return Matrix.__detcache[matrix]
         if len(matrix) == 1:
             return matrix[0][0]
-        return sum(matrix[i][0]*(-1)**i
+        det = sum(matrix[i][0]*(-1)**i
                 *Matrix.__det([row[1:] for row in matrix[:i]+matrix[i+1:]])
                 for i in range(len(matrix)))
+        Matrix.__detcache.update(dict([(matrix, det)]))
+        return det
 
 
     def __init__(self, array_2d: list, skip_det = False):
@@ -144,7 +161,7 @@ class Matrix:
         Returns:
             Matrix: transposed version of this matrix
         """
-        return Matrix(self._columns)
+        return Matrix(self._columns, True)
     
     def is_square(self) -> bool:
         """
@@ -158,7 +175,7 @@ class Matrix:
         Returns:
             Matrix: a copy of this matrix
         """
-        return Matrix([line.copy() for line in self._matrix])
+        return Matrix([line.copy() for line in self._matrix], True)
     
     def det(self, recalculate: bool = False) -> complex | None:
         """Returns the determinator of this Matrix,
@@ -190,7 +207,7 @@ class Matrix:
             raise Exception
         return Matrix([[self._matrix[i][j] + other._matrix[i][j]
                         for j in range(self._cols)
-                        ] for i in range(self._rows)])
+                        ] for i in range(self._rows)], True)
     
     def __sub__(self, other):
         """subtracts the second matrix from the first one
@@ -207,7 +224,7 @@ class Matrix:
             raise Exception
         return Matrix([[self._matrix[i][j] - other._matrix[i][j]
                         for j in range(self._cols)
-                        ] for i in range(self._rows)])
+                        ] for i in range(self._rows)], True)
     
     def __mul__(self, other):
         """Calculates the product of the two matrixes
@@ -222,13 +239,13 @@ class Matrix:
         if not (isinstance(other, Matrix)):
             return Matrix([[self._matrix[i][j] * other
                             for j in range(self._cols)
-                            ] for i in range(self._rows)])
+                            ] for i in range(self._rows)], True)
         elif self._cols != other._rows:
             raise Exception
         return Matrix([[sum([self._matrix[i][k] * other._matrix[k][j]
                              for k in range(self._cols)])
                              for j in range(other._cols)]
-                             for i in range(self._rows)])
+                             for i in range(self._rows)], True)
     
     def __eq__(self, other) -> bool:
         """Checks if matrixes are the same
@@ -276,6 +293,8 @@ class Matrix:
             for j in range(self._cols):
                 self.set(i, j, self.get(i, j) - other.get(i, j))
     
+
+    
     def print(self) -> str:
         """Rounds the results a bit and returns the matrix
         in printable str format
@@ -286,7 +305,7 @@ class Matrix:
         for line in printed:
             for i in range(len(line)):
                 if isinstance(line[i], complex):
-                    line[i] = complex(round(line[i].real, 6), round(line[i].imag, 6))
+                    line[i] = complex(float(f"{line[i].real:.5e}"), float(f"{line[i].imag:.5e}"))
                     if line[i].imag == 0:
                         line[i] = line[i].real
                 if isinstance(line[i], float):

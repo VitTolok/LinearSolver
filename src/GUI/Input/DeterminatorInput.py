@@ -4,6 +4,7 @@ from GUI.Input.InputTable import InputTable
 from Classes.Matrix import Matrix
 
 class DeterminatorInput(InputField):
+    """handles input for Determinator part of the GUI"""
     def activate(self, buffers: list):
         super().activate(buffers)
         self.__text_input = tk.Text(self._master, height=10, width=30)
@@ -25,6 +26,7 @@ class DeterminatorInput(InputField):
         self.__select_button.grid(row=1, column=2)
     
     def __resize(self):
+        """triggers size change of the table"""
         size = self.__size.get()
         buffer = self.__input_table.read()
         self.__input_table.collapse()
@@ -32,10 +34,12 @@ class DeterminatorInput(InputField):
         self.__input_table.activate(2, 1)
     
     def _collapse_text(self):
+        """collapses text input"""
         if super()._collapse_text():
             self.__text_input.destroy()
     
     def _collapse_alt(self):
+        """collapses table input"""
         if super()._collapse_alt():
             self.__size_scale.destroy()
             self.__input_table.collapse()
