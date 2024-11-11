@@ -1,32 +1,46 @@
 # LinearSolver
 
-
 - [LinearSolver](#linearsolver)
   - [Overview](#overview)
   - [LinearSolver's Dependencies](#linearsolvers-dependencies)
   - [How to run](#how-to-run)
   - [General Structure](#general-structure)
-    - [main.py](#mainpy)
-      - [Dependencies](#dependencies)
-    - [Window.py](#windowpy)
-      - [Dependencies](#dependencies-1)
-    - [Solver.py](#solverpy)
-      - [class Solver](#class-solver)
-      - [class LinSolver](#class-linsolver)
-      - [class MatDivSolver](#class-matdivsolver)
-      - [class TransBasisSolver](#class-transbasissolver)
-      - [class TransCoordSolver](#class-transcoordsolver)
-      - [class VecAriSolver](#class-vecarisolver)
-      - [Dependencies](#dependencies-2)
-    - [Matrix.py](#matrixpy)
-    - [Vector.py](#vectorpy)
-      - [Dependencies](#dependencies-3)
-  - [GUI](#gui)
-
+    - [Classes](#classes)
+      - [Matrix](#matrix)
+      - [Vector](#vector)
+    - [GUI](#gui)
+      - [Window](#window)
+      - [SubGUI](#subgui)
+        - [SubGUI module](#subgui-module)
+        - [TransitionSolverGUI](#transitionsolvergui)
+          - [TransitionSolverGUI module](#transitionsolvergui-module)
+          - [BasisTransitionGUI](#basistransitiongui)
+          - [CoordinateTransitionGUI](#coordinatetransitiongui)
+        - [DeterminatorGUI](#determinatorgui)
+        - [LinearSolverGUI](#linearsolvergui)
+        - [MatrixArithmeticsGUI](#matrixarithmeticsgui)
+        - [MatrixGeneratorGUI](#matrixgeneratorgui)
+        - [VectorArithmeticsGUI](#vectorarithmeticsgui)
+      - [Input](#input)
+        - [InputTable](#inputtable)
+        - [InputField](#inputfield)
+        - [BasisTransitionInput](#basistransitioninput)
+        - [CoordinateTransitionInput](#coordinatetransitioninput)
+        - [DeterminatorInput](#determinatorinput)
+        - [LinearSolverInput](#linearsolverinput)
+        - [MatrixArithmeticsInput](#matrixarithmeticsinput)
+        - [VectorArithmeticsInput](#vectorarithmeticsinput)
+    - [Solver](#solver)
+      - [Solver module](#solver-module)
+      - [BasisTransitionSolver](#basistransitionsolver)
+      - [CoordinateTransitionSolver](#coordinatetransitionsolver)
+      - [LinearSolver module](#linearsolver-module)
+      - [MatrixDivisionSolver](#matrixdivisionsolver)
+      - [VectorArithmeticsSolver](#vectorarithmeticssolver)
 
 ## Overview
 
-This project is a simple program built with the purpose of assisting the user in Calcultion, related to matrixes, such as: determinator calculation, matrix arithmetics, system of linear equations solution, basis and coodinate system transition and more (possibly in the future)
+This project is a simple program built with the purpose of assisting the user in Calcultion, related to matrixes, such as: determinator calculation, matrix arithmetics, system of linear equations solution, basis and coodinate system transition, vector arithmetics and more (possibly in the future)
 
 It was made entirely by me, @VitTolok. Yes, believe me or not, not a single line of this project was written by anything but me, not even GPT had a hand in this.
 
@@ -34,126 +48,261 @@ It was made entirely by me, @VitTolok. Yes, believe me or not, not a single line
 
 This project (apart from standard python) only depends on one library, ***tkinter***, which is used for creating GUI
 
+Also uses standard ***math*** library to enable the user to write complicated expressions as input.
+
 ## How to run
 
 If not already installed, install tkinter:
 ```
-pip install tkinter
+pip3 install tkinter
 ```
 Run main.py:
 ```
-python3 main.py
+python3 src/main.py
 ```
 
 ## General Structure
 
-The functionality of this program is split into several parts:
-- main.py
-- Window.py
-- Solver.py
-- Classes folder
+The functionality of this program is split into several packages:
+- [Classes](#classes)
+- [GUI](#gui)
+- [Solver](#Solver)
 
-### main.py
+The contents of these packages are described below
 
-This is the file for launching the program, by itself it does not do anything useful, it just creates a Window object that will manage the rest of the functionality and user interaction going forward.
+### Classes
 
-#### Dependencies
+This package contains two modules:
+- Matrix.py defining the [Matrix](#matrix) class
+- Vector.py defining the [Vector](#vector) class
 
-Internal:
-- the Window class from Window.py
+#### Matrix
+An object of this class represents a matrix, and through this object the user can interact with it. Some Notable methods are:
+- *\_\_init__(array_2d: list, skip_det = False)* - uses a list representing a matrix to construct one. the *skip_det* parameters allows the user to skip calculation of the determinator if it is not necessary even if the matrix is square.
+- *e(size: int) -> Matrix* - a function that returns an eye matrix of the requested size
+- *read(string: str, evaluate: bool = True) -> list\[list\[complex | str\]\]* - returns a list representation of a matrix, defined by its text form, given in *string*. the *evaluate* parameter defines whether the function will evaluate expressions into complex numbers or not.
+- *.tolist() -> list\[list\[complex\]\]* - a method that turns the matrix back into its list representation.
+- *.columns() -> list\[list\[complex\]\]* - a method that returns a list containing list representations of this matrix's columns
+- *.rows() -> int* - the number of rows in this matrix
+- *.cols() -> int* - the number of columns
+- *.get(row: int, column: int) -> complex* - the value in the cell that lies in the given row and the given column.
+- *.set(row: int, column: int, value: complex)* - sets the desired cell to a new value
+- *.transposed()* - returns the transposed version of this matrix. Skips determinator calculation.
+- *.is_square() -> bool* - whether this matrix is a square
+- *.copy()* - returns a copy of this matrix
+- *.det(recalculate: bool = False) -> complex | None* - returns the value of the determinator, if it exists and was already calculated, if *recalculate* is given as True, will attempt to recalculate the determinator (useful if it wasn't yet calculated or the matrix was changed)
+- *.\_\_add__(other: Matrix) -> Matrix* - matrix addition (overloads '+' operator)
+- *.\_\_sub__(other: Matrix) -> Matrix* - matrix subtraction (overloads '-' operator)
+- *.\_\_mul__(other: Matrix | complex) -> Matrix* - matrix multiplication (overloads '*' operator), if *other* is a number, multiplies all elements by it.
+- *.\_\_eq__(other: Matrix) -> bool* - whether the matrixes have all the same elements. '=='
+- similarly working overloads of '+=' and '-='
+- *.print() -> str* - returns this matrix as formatted text.
+- *.\_\_len__() -> int* - overloads len() fulction, same as *.rows()*
+- *clear_detcache()* - since calculating determinator is an N! algorithm, I added caching of already calculated ones to speed up the process, in extreme cases it may take up too much memory, so it has to be cleared from time to time.
+- *sizeof_detcache()* - returns the size of the cache in bytes 
 
-### Window.py
-The Window.py file contains one class called "Window"
+#### Vector
+An object of this class represents a vector. Keeps its coordinates and the basis as well as its basis, in this project often sidelined, as a lot of it can be replaced with matrixes if you know what you're doing.
+Depends on [Matrix](#matrix)
 
-A Window object is responsible for maintaining the GUI, it creates and deletes different parts of the GUI when necessary, reads user input, coverts it for it to be processed elsewhere, retrieves it and converts back to user readable text.
+### GUI
+Contains all objects that handle the GUI.
+This package contains a module [Window](#window) as well as two packages:
+- [Input](#input)
+- [SubGUI](#subgui)
 
-Once a Window object has been created, the basic GUI appears on screen and the program enters the main loop, which it does not leave until the window is closed or the program is stopped forcefully. The only exception is when a button is pressed in the GUI, which calls for one of the Window object's own methods responsible for that button's functionality.
+#### Window
+This module defines one class to rule them all, a Window object creates a new Window, some basic buttons representing different parts of the GUI, as well as [SubGUI](#SubGUI) objects tied to these buttons that will handle what each of these parts actually does.
+Depends on every [SubGUI](#SubGUI) module as well as ***tkinter***
 
-This Class is not for general use as it is entirely hardcoded to maintain this specific project.
+#### SubGUI
+this package contains:
+- [SubGUI](#subgui-module) module
+- [TransitionSolverGUI](#transitionsolvergui) package
+- [DeterminatorGUI](#determinatorgui) module
+- [LinearSolverGUI](#linearsolvergui) module
+- [MatrixArithmeticsGUI](#matrixarithmeticsgui) module
+- [MatrixGeneratorGUI](#matrixgeneratorgui) module
+- [VectorArithmeticsGUI](#vectorarithmeticsgui) module
 
-#### Dependencies
+##### SubGUI module
+This is an abstract class that handles basic logic for a part of the GUI
 
-Internal:
-- All of the Solver classes
-- The Classes folder files
+Every module in the [SubGUI](#subgui) package is a class that inherits from this one. Every child of this class has 3 main methods:
+- *.activate()* - creates and displays all widgets that this part of the GUI requires.
+- *.collapse()* - gets rid of all widgets created by *.activate()*
+- *._calculate()* - this method is the one the execute button is supposed to call. Calculates the desired solution  and displays it on screen.
 
-External:
+Depends on ***tkinter***
 
-- tkinter, a GUI library that is bundled with python
+##### TransitionSolverGUI
+This package contains three modules:
+- [TransitionSolverGUI](#transitionsolvergui-module)
+- [BasisTransitionGUI](#basistransitiongui)
+- [CoordinateTransitionGUI](#coordinatetransitiongui)
 
-### Solver.py
+###### TransitionSolverGUI module
+This module is a child of [SubGUI](#subgui-module) that manages two other SubGUI's, since 
+[BasisTransitionGUI](#basistransitiongui) and [CoordinateTransitionGUI](#coordinatetransitiongui) are so similar, they have their own subdivision.
 
-This Python file contains classes for data processing, each class containing some section of the program's useful functionality
-The list of Solver classes may not be final.
+Depends on [SubGUI](#subgui-module), [BasisTransitionGUI](#basistransitiongui) and [CoordinateTransitionGUI](#coordinatetransitiongui) as well as ***tkinter***
 
-#### class Solver
+###### BasisTransitionGUI
+This module handles basis transitions GUI. Child of [SubGUI](#subgui-module).
 
-Basic senior abstract class containing basic data input handling
+Depends on [SubGUI](#subgui-module), [BasisTransitionInput](#basistransitioninput) module, [Matrix](#matrix) module and [BasisTransitionSolver](#basistransitionsolver) module as well as ***tkinter***
 
-- ***\_\_init__(input_list)*** - the constructor, writes down the input data list
-- **.setinput(value, index)** - change the object with given index in the input data list to the given one
-- **.getinput(index)** - returns the object with given index in the input data list
-- **.get_solution()** - returns the solution, defined by non-abstract child classes
+###### CoordinateTransitionGUI
+This module handles coordinate system transitions GUI. Child of [SubGUI](#subgui-module).
 
-#### class LinSolver
+Depends on [SubGUI](#subgui-module), [CoordinateTransitionInput](#coordinatetransitioninput) module, [Matrix](#matrix) module and [CoordinateTransitionSolver](#coordinatetransitionsolver) module as well as ***tkinter***
 
-A class for solving Linear equations defined by AX=B, where A and B are given Matrixes, child of [Solver](#class-solver)
+##### DeterminatorGUI
+This module handles the determinator calculation part of the GUI. Child of [SubGUI](#subgui-module).
 
-- **._linsolve(a, b)** - returns the X matrix, assuming Matrixes A and B have indexes a and b respectfully in the input data list
-- **.get_solution()** - calls for ***._linsolve(0, 1)***
+Depends on [SubGUI](#subgui-module), [DeterminatorInput](#determinatorinput) module and [Matrix](#matrix) module, as well as ***tkinter***
 
-#### class MatDivSolver
-A class for performing matrix division by inverted matrix multiplication. Only accepts square matrixes as divisors. Child of [LinSolver](#class-linsolver)
+##### LinearSolverGUI
+This module handles linear equations GUI. Child of [SubGUI](#subgui-module).
 
-- **._matdiv(a, b)** - returns the result of dividing Matrix A by Matrix B, assuming Matrixes A and B have indexes a and b respectfully in the input data list. Performs calculations using ***._linsolve*** from parent [LinSolver](#class-linsolver)
-- **.get_solution()** - calls for ***._matdiv(0, 1)***
+Depends on [SubGUI](#subgui-module), [LinearSolverInput](#linearsolverinput) module, [Matrix](#matrix) module and [LinearSolver](#linearsolver) module as well as ***tkinter***
 
-#### class TransBasisSolver
-A class that creates, stores and applies a basis transition matrix for vectors. Child of [LinSolver](#class-linsolver)
+##### MatrixArithmeticsGUI
+This module handles matrix arithmetics GUI. Child of [SubGUI](#subgui-module).
 
-- ***\_\_init__(input_list)*** - the modified constructor. Additionally calculates and writes down the transition matrix, assuming the basis vectors are stored as two matrixes under indexes 0 and 1
-- **.transmat(initindex, tragetindex)** - calculates a transition matrix for Matrixes from data input list under indexes initindex and targetindex
-- **.transvec(vector)** - returns given vector (or a batch of vectors as a matrix) in the target basis, assuming they were in the initial basis
-- **.revertvec(vector)** - returns given vector (or a batch of vectors as a matrix) in the initial basis, assuming they were in the target basis
-- **.get_solution()** - returns the transition matrix
+Depends on [SubGUI](#subgui-module), [MatrixArithmeticsInput](#matrixarithmeticsinput) module, [Matrix](#matrix) module and [MatrixDivisionSolver](#matrixdivisionsolver) module as well as ***tkinter***
 
-#### class TransCoordSolver
-Calculates and stores key points and a transition Matrix between two general Cartesian coordinate systems, given their common points. Child of [TransBasisSolver](#class-transbasissolver)
+##### MatrixGeneratorGUI
+This module handles the matrix generator GUI. Child of [SubGUI](#subgui-module).
 
-- ***\_\_init__(input_list)*** - the modified constructor. Additionally calculates and writes down the transition matrix and one key point for each system, assuming the common points are stored as two matrixes under indexes 0 and 1
-- **.transpoint(point)** - for a point Vector (or a batch stored as columns in a Matrix) in initial coordinate system, returns it in the target coordinate system
-- **.revertpoint(point)** - for a point Vector (or a batch stored as columns in a Matrix) in target coordinate system, returns it in the initial coordinate system
-- **.get_solution()** - returns the transition matrix
+Depends on [SubGUI](#subgui-module) and [Matrix](#matrix) module as well as ***tkinter***
 
-#### class VecAriSolver
-Accepts two vectors with their basises and performs arithmetical operations with them. Also Supports Batches of Vectors in the same basis. Child of [TransBasisSolver](#class-transbasissolver)
-- ***.\_\_init__(input_list)*** - writes down two vectors (indexes 1 and 3) and their basises, makes a transition matrix.
-- **.add(basis)** - returns a Vector sum in a basis that depends on the *basis* integer input: 0 - unit orthogonal basis; 1 - first vector/batch's basis; 2 - second's
-- **.sub(basis)** - returns a Vector subtraction result in a basis that depends on the *basis* integer input: 0 - unit orthogonal basis; 1 - first vector/batch's basis; 2 - second's
-- **.scalmult()** - returns a complex number - the result of scalar multiplication
-- **.vectmult(basis)** - returns a Vector multiplication result in a basis that depends on the *basis* integer input: 0 - unit orthogonal basis; 1 - first vector/batch's basis; 2 - second's. If there are more than 2 vectors to multiply, they must all be in the first batch.
-#### Dependencies
-Internal:
-- Matrix from Matrix.py
-- Vector from Vector.py
+##### VectorArithmeticsGUI
+This module handles vector arithmetics GUI. Child of [SubGUI](#subgui-module).
 
-### Matrix.py
-Contains one class, Matrix, resposible for storing Matrixes and conducting simple operations with them.
-### Vector.py
-Contains one class, Vector, resposible for storing Vectors and conducting simple operations with them.
-#### Dependencies
-Internal
-- Matrix class from Matrix.py
-## GUI
-The main interface is separated into several categories, i.e. determinator, matrix arithmetics, etc. Each of them is accessed by pressing the corresponding button on the left. All of them require inputs from the user via text, the general rules to formatting the input of a matrix are:
-- Separate rows of the matrix must be written on separate lines
-- All elements of the same row must be on the same line
-- Between two elements of the same row there must be at least one space (' ')
-- Within one element there can be no spaces
-- Integers can be written as follows: 123 -45
-- Floats can be written like this: 1.23 -4.5
-- Complex numbers like this: 1.2-3.4j -5.67+9j
+Depends on [SubGUI](#subgui-module), [VectorArithmeticsInput](#vectorarithmeticsinput) module, [Matrix](#matrix) module and [VectorArithmeticsSolver](#vectorarithmeticssolver) module as well as ***tkinter***
 
-For arithmetics categories put the corresponding operator in the middle, between the operands, be that vectors or matrixes
+#### Input
+The modules in this package are used by SubGUI's to handle switching between two input modes: text and table
+this Package contains modules:
+- [InputTable](#inputtable) 
+- [InputField](#inputfield)
+- [BasisTransitionInput](#basistransitioninput)
+- [CoordinateTransitionInput](#coordinatetransitioninput)
+- [DeterminatorInput](#determinatorinput)
+- [LinearSolverInput](#linearsolverinput)
+- [MatrixArithmeticsInput](#matrixarithmeticsinput)
+- [VectorArithmeticsInput](#vectorarithmeticsinput)
 
-To get the result, press the 'Execute' button.
+##### InputTable
+This module defines a class that handles creating and interacting with a rectangular table of entry widgets.
+Its methods include:
+- *.\_\_init__(master, rows: int, columns: int, buffer: str | None = None))* - basic setup for the creation of the table. Uses *buffer* to fill the table
+- *.activate(row: int, column: int)* - displays the table at the desired grid cell inside the *master* window
+- *.read()* - returns the collective input as text
+- *.collapse()* - gets rid of the displayed table.
+
+Depends on the [Matrix](#matrix) module as well as ***tkinter***
+
+##### InputField
+A parent class for all modules whose name ends in "Input". Defines basic logic for input type switching.
+Its methods include:
+- *.\_\_init__(master, switch_button: tk.Button)* - basic setup. Uses *switch_button* to set up the switch trigger
+- *.activate(buffers: list\[str])* - activates text input and fills it using buffers
+- *.collapse()* - collapses all inputs
+- *.read(field: int = 0) -> str* - reads text from the desired input.
+
+Some of these methods are universal for all descendants and thus are only defined here.
+
+depends on ***tkinter***
+
+##### BasisTransitionInput
+Manages 3 fields for [BasisTransitionGUI](#basistransitiongui), child of [InputField](#inputfield)
+
+Depends on [InputField](#inputfield), [InputTable](#inputtable) and the [Matrix](#matrix) module as well as ***tkinter***
+
+##### CoordinateTransitionInput
+Manages 3 fields for [CoordinateTransitionGUI](#coordinatetransitiongui), child of [InputField](#inputfield)
+
+Depends on [InputField](#inputfield), [InputTable](#inputtable) and the [Matrix](#matrix) module as well as ***tkinter***
+
+##### DeterminatorInput
+Manages 1 field for [DeterminatorGUI](#determinatorgui), child of [InputField](#inputfield)
+
+Depends on [InputField](#inputfield), [InputTable](#inputtable) and the [Matrix](#matrix) module as well as ***tkinter***
+
+##### LinearSolverInput
+Manages 3 fields for [LinearSolverGUI](#linearsolvergui), child of [InputField](#inputfield)
+
+Depends on [InputField](#inputfield), [InputTable](#inputtable) and the [Matrix](#matrix) module as well as ***tkinter***
+
+##### MatrixArithmeticsInput
+Manages 2 fields for [MatrixArithmeticsGUI](#matrixarithmeticsgui), child of [InputField](#inputfield)
+
+Depends on [InputField](#inputfield), [InputTable](#inputtable) and the [Matrix](#matrix) module as well as ***tkinter***
+
+##### VectorArithmeticsInput
+Manages 4 fields for [VectorArithmeticsGUI](#vectorarithmeticsgui), child of [InputField](#inputfield)
+
+Depends on [InputField](#inputfield), [InputTable](#inputtable) and the [Matrix](#matrix) module as well as ***tkinter***
+
+### Solver
+This package contains modules that exist to conduct complex calculations through creation of [Solver](#solver-module) objects. This package contains modules:
+- [Solver](#solver-module)
+- [BasisTransitionSolver](#basistransitionsolver)
+- [CoordinateTransitionSolver](#coordinatetransitionsolver)
+- [LinearSolver](#linearsolver-module)
+- [MatrixDivisionSolver](#matrixdivisionsolver)
+- [VectorArithmeticsSolver](#vectorarithmeticssolver)
+
+#### Solver module
+This is an abstract class for Solver objects. By itself it does not accomplish or calculate anything. All other modules in the [Solver](#solver) package are this class's descendants.
+
+Does not have dependencies
+
+#### BasisTransitionSolver
+This is a class for calculating transition matrixes between two basises. Child of [LinearSolver](#linearsolver-module). The *input_list* must consist of the first and the second basis. Introduces methods:
+- *.transmat(initindex: int, targetindex: int)* - calculates the transition matrix from initial basis to the target basis assuming initindex and targetindex are their indexes in the *input_list*
+- *.set_transition(initindex: int, targetindex: int)* - same but stes them internally for future reference
+- *.transvec(vector: Vector | Matrix)* - uses stored transition matrix to change the basis of the given vector or batch of vectors
+- *.revertvec(vector: Vector | Matrix)* - same, but changes the vector's basis back to the initial one
+- *.get_solution()* - returns the stored transition matrix
+
+Depends on the [LinearSolver](#linearsolver-module) module, the [Matrix](#matrix) module and the [Vector](#vector) module
+
+#### CoordinateTransitionSolver
+This is a class for transitions between two coordinate systems with known common points. Child of [BasisTransitionSolver](#basistransitionsolver). The *input_list* must consist of the first and the second coordinate system coordinates for the common points as Matrixes. Introduces methods:
+- *.transpoint(vector: Vector | Matrix)* - transitions given points to target coordinate system
+- *.revertpoint(vector: Vector | Matrix)* - transitions the points back to initial coordinate system
+
+Depends on [BasisTransitionSolver](#basistransitionsolver) module, the [Matrix](#matrix) module and the [Vector](#vector) module
+
+#### LinearSolver module
+This is a class for calculating a matrix X such that A*X = B, with given square matrix A and some Matrix B.
+Child of [Solver](#solver-module). The *input_list* must contain matrixes A and B. Introduces methods:
+- *._linsolve(a: int, b: int)* - calculates matrix X assuming a and b are indexes of A and B
+- *.get_solution()* - returns solution for a = 0 and b = 1
+
+Depends on [Solver](#solver-module) module and the [Matrix](#matrix) module
+
+#### MatrixDivisionSolver
+This is a class for calculating matrix division by inverted matrix multiplication. Child of [LinearSolver](#linearsolver-module). The input list must contain the operands. Introduces methods:
+- *._matdiv(a: int, b: int)* - returns the result of dividing Matrix a by Matrix B
+- *.get_solution()* - returns the solution for a = 0 and b = 1
+
+Depends on the [LinearSolver](#linearsolver-module) module and the [Matrix](#matrix) module
+
+#### VectorArithmeticsSolver
+This is a class for conducting arithmetic opreations with two batches of vectors with different basises.
+Child of [BasisTransitionSolver](#basistransitionsolver). The input list must contain:
+  - the basis of the first batch
+  - the first batch
+  - the basis of the second batch
+  - the second batch
+  
+Introduces methods:
+- *.add(basis: 0 | 1 | 2)* - returns the sum of given vectors in the desired basis
+- *.sub(basis: 0 | 1 | 2)* - returns the sub of given vectors in the desired basis
+- *.scalmult()* - calculates the scalar product of 2 vectors
+- *.mixmult()* - calculates the mixed product of N N-dimensional vectors
+- *.vectormult()* - calculates the vector product of N N-dimensional vectors returns it in eye basis.

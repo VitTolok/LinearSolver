@@ -11,7 +11,7 @@ class InputField:
         self._is_init = False
         self._fields = 1
 
-    def activate(self, buffers: list):
+    def activate(self, buffers: list[str]):
         """basic logic for activation of text input"""
         self._is_init = True
         self._mode_alt = False

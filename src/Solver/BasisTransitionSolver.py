@@ -25,6 +25,11 @@ class BasisTransitionSolver(LinearSolver):
         """
         return self._linsolve(targetindex, initindex)
     
+    def set_transition(self, initindex: int = 0, targetindex: int = 0):
+        """sets the transition matrixes for transvec and revertvec"""
+        self._transmat = self.transmat(initindex, targetindex)
+        self._revmat = self.transmat(targetindex, initindex)
+    
     def transvec(self, vector: Vector | Matrix):
         """changes a vectors basis from first to the second"""
         if isinstance(vector, Vector):

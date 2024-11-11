@@ -108,14 +108,14 @@ class Matrix:
         if self._cols == self._rows and not skip_det:
             self._det = Matrix.__det(array_2d)
 
-    def tolist(self) -> list:
+    def tolist(self) -> list[list[complex]]:
         """
         Returns:
             list: the 2D list represetation of this Matrix
         """
         return self._matrix
     
-    def columns(self) -> list:
+    def columns(self) -> list[list[complex]]:
         """
         Returns:
             list: list containing columns of this matrix as lists
@@ -329,7 +329,7 @@ class Matrix:
         else:
             raise Exception
     
-    def __len__(self):
+    def __len__(self) -> int:
         return self._rows
 
         
