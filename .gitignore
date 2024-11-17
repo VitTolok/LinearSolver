@@ -1,2 +1,8 @@
 LinearSolver.code-workspace
 .vscode
+src/GUI/__pycache__
+src/Solver/__pycache__
+src/Classes/__pycache__
+src/GUI/SubGUI/__pycache__
+src/GUI/SubGUI/TransitionSolverGUI/__pycache__
+src/GUI/Input/__pycache__
