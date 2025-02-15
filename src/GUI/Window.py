@@ -11,7 +11,7 @@ class Window:
     to activate parts of the gui"""
     def __init__(self):
         """creates all the main buttons and SubGUI objects"""
-        self.__master = tk.Tk(screenName="LinearSolver",
+        self.__master = tk.Tk(screenName=":0",
                               baseName="LinSol", 
                               className="LinearSolverV0_2")
         self.__det_gui_b = tk.Button(self.__master, text="Determinator",
