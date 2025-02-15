@@ -3,6 +3,7 @@ from Classes.Matrix import Matrix
 from GUI.SubGUI.SubGUI import SubGUI
 from GUI.Input.LinearSolverInput import LinearSolverInput
 from Solver.LinearSolver import LinearSolver
+from Solver.AbsoluteLinearSolver import AbsoluteLinearSolver
 
 class LinearSolverGUI(SubGUI):
     """a class handling the Linear Equations part of the GUI"""
