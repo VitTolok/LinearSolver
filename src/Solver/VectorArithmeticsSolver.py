@@ -2,11 +2,13 @@ from Solver.BasisTransitionSolver import BasisTransitionSolver
 from Classes.Matrix import Matrix
 from Classes.Vector import Vector
 
+
 class VectorArithmeticsSolver(BasisTransitionSolver):
     """A Solver for Vector Arithmetics Algorithms
     Args:
         BasisTransitionSolver (Solver): for changing basises
     """
+
     def __init__(self, input_list: list[Matrix | Vector] = None):
         """Writes inputs and calculates transition matrixes
         if a basis is not given it is replaced by an eye matrix
@@ -47,7 +49,7 @@ class VectorArithmeticsSolver(BasisTransitionSolver):
         self.__batch_2 = input_list[3]
         self.__basis_1.det(True)
         self.__basis_2.det(True)
-    
+
     def add(self, basis: 0 | 1 | 2) -> Matrix:
         """Calculates the vector sum
         Args:
@@ -67,7 +69,7 @@ class VectorArithmeticsSolver(BasisTransitionSolver):
         else:
             self.__batch_1 = self.transvec(self.__batch_1)
         return self.__batch_1 + self.__batch_2
-    
+
     def sub(self, basis: 0 | 1 | 2) -> Matrix:
         """calculates vector subtraction
         Args:
@@ -87,7 +89,7 @@ class VectorArithmeticsSolver(BasisTransitionSolver):
         else:
             self.__batch_1 = self.transvec(self.__batch_1)
         return self.__batch_1 - self.__batch_2
-    
+
     def scalmult(self) -> complex:
         """calculates the scalar product of two vectors
         Raises:
@@ -102,14 +104,16 @@ class VectorArithmeticsSolver(BasisTransitionSolver):
         elif self.__batch_2 is None:
             batch = self.__basis_1 * self.__batch_1
         else:
-            batch = Matrix((self.__basis_1*self.__batch_1).columns() +
-                           (self.__basis_2*self.__batch_2).columns()).transposed()
+            batch = Matrix(
+                (self.__basis_1 * self.__batch_1).columns()
+                + (self.__basis_2 * self.__batch_2).columns()
+            ).transposed()
         if batch.cols() == 2:
             first = Matrix([batch.columns()[0]])
             second = Vector(batch.columns()[1]).tomatrix()
-            return (first*second).det()
+            return (first * second).det()
         raise Exception
-    
+
     def mixmult(self) -> complex:
         """calculates the mixed product of N N-dimensional vectors
         Raises:
@@ -124,12 +128,14 @@ class VectorArithmeticsSolver(BasisTransitionSolver):
         elif self.__batch_2 is None:
             batch = self.__basis_1 * self.__batch_1
         else:
-            batch = Matrix((self.__basis_1*self.__batch_1).columns() +
-                           (self.__basis_2*self.__batch_2).columns()).transposed()
+            batch = Matrix(
+                (self.__basis_1 * self.__batch_1).columns()
+                + (self.__basis_2 * self.__batch_2).columns()
+            ).transposed()
         if batch.cols() == batch.rows():
             return batch.det()
         raise Exception
-    
+
     def vectormult(self) -> Vector:
         """calculates the vector product of N-1 N-dimensional vectors
         Raises:
@@ -144,8 +150,10 @@ class VectorArithmeticsSolver(BasisTransitionSolver):
         elif self.__batch_2 is None:
             batch = self.__basis_1 * self.__batch_1
         else:
-            batch = Matrix((self.__basis_1*self.__batch_1).columns() +
-                           (self.__basis_2*self.__batch_2).columns())
+            batch = Matrix(
+                (self.__basis_1 * self.__batch_1).columns()
+                + (self.__basis_2 * self.__batch_2).columns()
+            )
         if batch.rows() == batch.cols() - 1:
             return Vector.vect_mult([Vector(line) for line in batch.tolist()])
         raise Exception

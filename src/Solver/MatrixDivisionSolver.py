@@ -1,6 +1,7 @@
 from Classes.Matrix import Matrix
 from Solver.LinearSolver import LinearSolver
 
+
 class MatrixDivisionSolver(LinearSolver):
     def _matdiv(self, a: int, b: int) -> Matrix:
         """Matrix division by inverted matrix multiplication
@@ -19,6 +20,6 @@ class MatrixDivisionSolver(LinearSolver):
         invmatb = self._linsolve(b, -1)
         self._input.pop()
         return matrixa * invmatb
-    
+
     def get_solution(self):
         return self._matdiv(0, 1)

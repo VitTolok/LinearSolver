@@ -4,27 +4,35 @@ from GUI.Input.MatrixArithmeticsInput import MatrixArithmeticsInput
 from Classes.Matrix import Matrix
 from Solver.MatrixDivisionSolver import MatrixDivisionSolver
 
+
 class MatrixArithmeticsGUI(SubGUI):
     """a class handling the Matrix Arithmetics part of the GUI"""
+
     def __init__(self, master: tk.Tk, button: tk.Button):
         super().__init__(master, button)
         self.__first_input_buffer = ""
         self.__second_input_buffer = ""
         self.__output_buffer = ""
-    
+
     def activate(self):
         super().activate()
-        self.__operator_label = tk.Label(self._master,
-                                         text="Enter +, - or * below\n(or even /)")
+        self.__operator_label = tk.Label(
+            self._master, text="Enter +, - or * below\n(or even /)"
+        )
         self.__operator_input = tk.Entry(self._master, width=5)
-        self.__alt_input_b = tk.Button(self._master, text="Alt Input",
-                                       activebackground="green", width=15)
+        self.__alt_input_b = tk.Button(
+            self._master, text="Alt Input", activebackground="green", width=15
+        )
         self.__input = MatrixArithmeticsInput(self._master, self.__alt_input_b)
         self.__output_label = tk.Label(self._master, text="Result:")
         self.__output_text = tk.Text(self._master, height=10, width=30)
-        self.__execute_b = tk.Button(self._master, text="Execute",
-                                     activebackground="green",
-                                     width=15, command=self._calculate)
+        self.__execute_b = tk.Button(
+            self._master,
+            text="Execute",
+            activebackground="green",
+            width=15,
+            command=self._calculate,
+        )
         self.__input.activate([self.__first_input_buffer, self.__second_input_buffer])
         self.__output_text.insert("1.0", self.__output_buffer)
         self.__operator_label.grid(row=0, column=3)
@@ -46,20 +54,20 @@ class MatrixArithmeticsGUI(SubGUI):
             self.__output_text.destroy()
             self.__execute_b.destroy()
             self.__alt_input_b.destroy()
-    
+
     def _calculate(self):
         matrixa = Matrix(Matrix.read(self.__input.read(0)), True)
         matrixb = Matrix(Matrix.read(self.__input.read(1)), True)
         operation_str = self.__operator_input.get()
-        if not (operation_str in ['+', '-', '*', '/']):
+        if not (operation_str in ["+", "-", "*", "/"]):
             SubGUI._write(self.__output_text, "Invalid input")
             return
         try:
-            if operation_str == '+':
+            if operation_str == "+":
                 matrix_result = matrixa + matrixb
-            elif operation_str == '-':
+            elif operation_str == "-":
                 matrix_result = matrixa - matrixb
-            elif operation_str == '*':
+            elif operation_str == "*":
                 if matrixa.rows() == matrixa.cols() == 1:
                     matrix_result = matrixb * matrixa.det()
                 elif matrixb.rows() == matrixb.cols() == 1:

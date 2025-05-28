@@ -4,8 +4,10 @@ from GUI.Input.CoordinateTransitionInput import CoordinateTransitionInput
 from Classes.Matrix import Matrix
 from Solver.CoordinateTransitionSolver import CoordinateTransitionSolver
 
+
 class CoordinateTransitionGUI(SubGUI):
     """a class handling the Coordinate Sysytem Transitions part of the GUI"""
+
     def __init__(self, master, button):
         super().__init__(master, button)
         self.__points_1_buffer = ""
@@ -15,22 +17,27 @@ class CoordinateTransitionGUI(SubGUI):
 
     def activate(self):
         super().activate()
-        self.__alt_input_b = tk.Button(self._master, text="Alt Input",
-                                     activebackground="green")
+        self.__alt_input_b = tk.Button(
+            self._master, text="Alt Input", activebackground="green"
+        )
         self.__input = CoordinateTransitionInput(self._master, self.__alt_input_b)
         self.__result_label = tk.Label(self._master, text="Result:")
         self.__text_output = tk.Text(self._master, height=10, width=30)
         self.__points_1_label = tk.Label(self._master, text="Points in First Basis:")
-        self.__batch_label = tk.Label(self._master,
-                text="Point in first basis:\n(Nothing for transition matrix)")
+        self.__batch_label = tk.Label(
+            self._master, text="Point in first basis:\n(Nothing for transition matrix)"
+        )
         self.__points_2_label = tk.Label(self._master, text="Second Basis:")
-        self.__execute_b = tk.Button(self._master, text="Execute",
-                                     activebackground="green",
-                                     command=self._calculate)
+        self.__execute_b = tk.Button(
+            self._master,
+            text="Execute",
+            activebackground="green",
+            command=self._calculate,
+        )
         SubGUI._write(self.__text_output, self.__output_buffer)
-        self.__input.activate([self.__points_1_buffer,
-                               self.__batch_buffer,
-                               self.__points_2_buffer])
+        self.__input.activate(
+            [self.__points_1_buffer, self.__batch_buffer, self.__points_2_buffer]
+        )
         self.__alt_input_b.grid(row=0, column=6)
         self.__result_label.grid(row=3, column=2)
         self.__text_output.grid(row=3, column=3)
@@ -38,7 +45,7 @@ class CoordinateTransitionGUI(SubGUI):
         self.__batch_label.grid(row=0, column=3)
         self.__points_2_label.grid(row=0, column=5)
         self.__execute_b.grid(row=3, column=5)
-    
+
     def collapse(self):
         if super().collapse():
             self.__points_1_buffer = self.__input.read(0)
@@ -53,7 +60,7 @@ class CoordinateTransitionGUI(SubGUI):
             self.__batch_label.destroy()
             self.__points_2_label.destroy()
             self.__execute_b.destroy()
-    
+
     def _calculate(self):
         try:
             basisa = Matrix(Matrix.read(self.__input.read(0)))

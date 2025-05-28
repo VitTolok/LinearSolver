@@ -1,13 +1,15 @@
 import tkinter as tk
 
+
 class SubGUI:
     """abstract class that handles basic logic for a part of the GUI"""
+
     def __init__(self, master: tk.Tk, button: tk.Button):
         """basic setup for a part of the GUI"""
         self._master = master
         self._button = button
         self._is_init = False
-    
+
     def activate(self):
         """basic logic for the activation of a part of the GUI"""
         self._is_init = True
@@ -29,4 +31,3 @@ class SubGUI:
         """a function for overwriting text widget's text"""
         output.delete("1.0", "end-1c")
         output.insert("1.0", text)
-

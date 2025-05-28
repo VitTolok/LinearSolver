@@ -1,7 +1,9 @@
 import tkinter as tk
 
+
 class InputField:
     """An abstract class for objects that handle switching between text and table input modes"""
+
     def __init__(self, master, switch_button: tk.Button):
         """basic setup, automatically configure the button"""
         self._master = master
@@ -16,7 +18,7 @@ class InputField:
         self._is_init = True
         self._mode_alt = False
         self._button.configure(fg="black")
-    
+
     def _activate_alt(self, buffers: list):
         """basic logic for activation of table input"""
         self._is_init = True
@@ -46,7 +48,7 @@ class InputField:
             self._is_init = False
             return True
         return False
-    
+
     def read(self, field: int = 0) -> str:
         """returns the contents of the input field as text"""
         if self._mode_alt:

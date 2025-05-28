@@ -1,6 +1,7 @@
 from Solver.Solver import Solver
 from Classes.Matrix import Matrix
 
+
 class LinearSolver(Solver):
     def _linsolve(self, a: int, b: int) -> Matrix:
         """An algorithm that provides a matrix X such that AX=B
@@ -20,17 +21,21 @@ class LinearSolver(Solver):
             raise Exception
         if matrixa.det(True) == complex(0):
             return None
-        matrixx = Matrix([[complex(0) for j in range(matrixb.cols())]
-                          for i in range(matrixb.rows())])
+        matrixx = Matrix(
+            [[complex(0) for j in range(matrixb.cols())] for i in range(matrixb.rows())]
+        )
         for i in range(matrixx.rows()):
             for j in range(matrixx.cols()):
-                matrixaij = Matrix(Matrix._transpose(
-                                   matrixa.columns()[:i]
-                                   + [matrixb.columns()[j]]
-                                   + matrixa.columns()[i+1:]))
-                matrixx.set(i, j, matrixaij.det()/matrixa.det())
+                matrixaij = Matrix(
+                    Matrix._transpose(
+                        matrixa.columns()[:i]
+                        + [matrixb.columns()[j]]
+                        + matrixa.columns()[i + 1 :]
+                    )
+                )
+                matrixx.set(i, j, matrixaij.det() / matrixa.det())
         matrixx.det(True)
         return matrixx
-    
+
     def get_solution(self):
         return self._linsolve(0, 1)
